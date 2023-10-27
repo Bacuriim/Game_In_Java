@@ -11,12 +11,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.br.einstein.characters.FallingCircle;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture imgE;
 	Texture imgD;
 	Texture imgB;
+	
 
 	private FallingCircle fallingCircle = new FallingCircle(700, 100);
 
