@@ -1,5 +1,7 @@
 package com.br.einstein;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.br.einstein.MyGdxGame;
@@ -8,7 +10,8 @@ import com.br.einstein.MyGdxGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setMaximized(true);
+		config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+		config.setMaximized(false);
 		config.setForegroundFPS(75);
 		config.setTitle("Game");
 		new Lwjgl3Application(new MyGdxGame(), config);

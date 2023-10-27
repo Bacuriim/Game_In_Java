@@ -3,6 +3,7 @@ package com.br.einstein;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,10 +16,12 @@ public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture imgE;
 	Texture imgD;
+	Texture imgB;
 
 	private FallingCircle fallingCircle = new FallingCircle(700, 100);
 
-	public Texture getImage() {
+
+    public Texture getImage() {
 		if (fallingCircle.getCircle().x < fallingCircle.getBefore()) {
 			return imgE;
 		} else if (fallingCircle.getCircle().x > fallingCircle.getBefore()) {
@@ -32,11 +35,16 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		imgE = new Texture("policialE.png");
 		imgD = new Texture("policialD.png");
+		imgB = new Texture("1_empxo5xvgaefru0-13999131.png");
 	}
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(10, 10, 10, 10);
+		ScreenUtils.clear(189/255f, 195/255f, 199/255f, 1);
+		batch.begin();
+		batch.draw(imgB, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.end();
+
 
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		fallingCircle.update(deltaTime);
@@ -52,4 +60,5 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.dispose();
 		getImage().dispose();
 	}
+
 }
