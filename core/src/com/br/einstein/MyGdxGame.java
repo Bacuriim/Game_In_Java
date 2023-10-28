@@ -16,7 +16,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	Texture imgB;
 
 	private boolean fullScreenStatus = true;
-	Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 
 	private FallingCircle fallingCircle = new FallingCircle(700, 100);
 
