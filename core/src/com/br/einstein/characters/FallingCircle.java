@@ -9,6 +9,8 @@ public class FallingCircle {
     private Vector2 velocity;
     private float before;
 
+    private float deltaTime = Gdx.graphics.getDeltaTime();
+
     public static int jump = 1;
 
     public FallingCircle(float x, float y) {
@@ -16,7 +18,7 @@ public class FallingCircle {
         velocity = new Vector2(0, -1); // Define a velocidade inicial como -1 na direção Y (gravidade para baixo).
     }
 
-    public void update(float deltaTime) {
+    public void update() {
         if (jump == 1) {
             if (!Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 velocity.y -= 9.8f * 35;
@@ -39,12 +41,10 @@ public class FallingCircle {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             before = circle.x;
             circle.x += 250 * deltaTime;
-            System.out.println(circle.x);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             before = circle.x;
             circle.x -= 250 * deltaTime;
-            System.out.println(circle.x);
         }
         circle.x += velocity.x * deltaTime;
 

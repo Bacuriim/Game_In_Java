@@ -38,8 +38,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void render () {
 		ScreenUtils.clear(10, 10, 10, 10);
 
-		float deltaTime = Gdx.graphics.getDeltaTime();
-		fallingCircle.update(deltaTime);
+		fallingCircle.update();
 
 		// Desenhar o retângulo
 		batch.begin();
