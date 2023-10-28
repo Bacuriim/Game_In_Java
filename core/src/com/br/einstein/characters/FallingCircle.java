@@ -39,12 +39,10 @@ public class FallingCircle {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             before = circle.x;
             circle.x += 250 * deltaTime;
-            System.out.println(circle.x);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             before = circle.x;
             circle.x -= 250 * deltaTime;
-            System.out.println(circle.x);
         }
         circle.x += velocity.x * deltaTime;
 

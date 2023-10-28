@@ -11,7 +11,9 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
-		config.setMaximized(false);
+		config.setMaximized(true);
+		config.useVsync(true);
+		config.setResizable(true);
 		config.setForegroundFPS(75);
 		config.setTitle("Game");
 		new Lwjgl3Application(new MyGdxGame(), config);
