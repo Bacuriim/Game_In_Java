@@ -6,7 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.br.einstein.characters.FallingCircle;
+import com.br.einstein.characters.Character;
 
 public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -16,12 +16,12 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	private boolean fullScreenStatus = true;
 
-	private FallingCircle fallingCircle = new FallingCircle(700, 100);
+	private Character character = new Character(700, 100);
 
     public Texture getImage() {
-		if (fallingCircle.getCircle().x < fallingCircle.getBefore()) {
+		if (character.getX() < character.getBefore()) {
 			return imgE;
-		} else if (fallingCircle.getCircle().x > fallingCircle.getBefore()) {
+		} else if (character.getX() > character.getBefore()) {
 			return imgD;
 		}
 		return null;
@@ -63,13 +63,12 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.draw(imgB, 0, 0, getWidthScreen(fullScreenStatus), getHeightScreen(fullScreenStatus));
 		batch.end();
 
-		float deltaTime = Gdx.graphics.getDeltaTime();
-		fallingCircle.update(deltaTime);
+		character.update();
 
 
 		// Desenhar o retângulo
 		batch.begin();
-		batch.draw(getImage() , fallingCircle.getCircle().x , fallingCircle.getCircle().y , 500 , 450);
+		batch.draw(getImage() , character.getX() , character.getY() , 500 , 450);
 		batch.end();
 	}
 	
