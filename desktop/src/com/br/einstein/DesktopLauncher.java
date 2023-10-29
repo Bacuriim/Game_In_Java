@@ -16,6 +16,7 @@ public class DesktopLauncher {
 		config.setResizable(true);
 		config.setForegroundFPS(75);
 		config.setTitle("Game");
+		config.setWindowIcon("icon.png");
 		new Lwjgl3Application(new MyGdxGame(), config);
 	}
 }
