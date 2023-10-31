@@ -14,31 +14,46 @@ public class MyGdxGame extends ApplicationAdapter {
 	Texture imgD;
 	Texture imgB;
 
-	private boolean fullScreenStatus = true;
+	protected static boolean fullScreenStatus = true;
 
-	private Character character = new Character(700, 100);
+	private Character character1 = new Character(700, 25 , Input.Keys.A , Input.Keys.D , Input.Keys.SPACE);
 
-    public Texture getImage() {
-		if (character.getX() < character.getBefore()) {
+	private Character character2 = new Character(700 , 25 , Input.Keys.LEFT , Input.Keys.RIGHT , Input.Keys.UP);
+
+    public Texture getImage1() {
+		if (character1.getX() < character1.getBefore()) {
 			return imgE;
-		} else if (character.getX() > character.getBefore()) {
+		} else if (character1.getX() > character1.getBefore()) {
 			return imgD;
 		}
 		return null;
 	}
 
-	public int getWidthScreen(boolean fullScreenStatus) {
+	public Texture getImage2() {
+		if (character2.getX() < character2.getBefore()) {
+			return imgE;
+		} else if (character2.getX() > character2.getBefore()) {
+			return imgD;
+		}
+		return null;
+	}
+
+	public static int getWidthScreen(boolean fullScreenStatus) {
 		if (fullScreenStatus) {
 			return Gdx.graphics.getWidth();
 		}
 		return 2000;
 	}
 
-	public int getHeightScreen(boolean fullScreenStatus) {
+	public static int getHeightScreen(boolean fullScreenStatus) {
 		if (fullScreenStatus) {
 			return Gdx.graphics.getHeight();
 		}
 		return 1200;
+	}
+
+	public static boolean isFullScreenStatus() {
+		return fullScreenStatus;
 	}
 
 	@Override
@@ -51,10 +66,10 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && fullScreenStatus) {
+		if(Gdx.input.isKeyJustPressed(Input.Keys.F11) && fullScreenStatus) {
 			Gdx.graphics.setWindowedMode(1200,800);
 			fullScreenStatus = false;
-		} else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && !fullScreenStatus) {
+		} else if(Gdx.input.isKeyJustPressed(Input.Keys.F11) && !fullScreenStatus) {
 			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 			fullScreenStatus = true;
 		}
@@ -63,19 +78,25 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.draw(imgB, 0, 0, getWidthScreen(fullScreenStatus), getHeightScreen(fullScreenStatus));
 		batch.end();
 
-		character.update();
+		character1.update();
+		character2.update();
 
 
 		// Desenhar o retângulo
 		batch.begin();
-		batch.draw(getImage() , character.getX() , character.getY() , 500 , 450);
+		batch.draw(getImage1() , character1.getX() , character1.getY() , 500 , 450);
+		batch.end();
+
+		batch.begin();
+		batch.draw(getImage2() , character2.getX() , character2.getY() , 500 , 450);
 		batch.end();
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
-		getImage().dispose();
+		getImage1().dispose();
+		getImage2().dispose();
 	}
 
 }
