@@ -49,7 +49,7 @@ public class Character {
             if (!Gdx.input.isKeyJustPressed(space)) {
                 velocity.y -= 9.8f;
             }
-            if (y <= 25) {
+            if (y < 25) {
                 jump = 1;
             }
         }
