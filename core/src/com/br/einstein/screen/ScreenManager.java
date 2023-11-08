@@ -11,6 +11,8 @@ public class ScreenManager extends Game {
     public SpriteBatch batch;
     private boolean fullScreenStatus;
 
+
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -20,10 +22,11 @@ public class ScreenManager extends Game {
     @Override
     public void render() {
         super.render();
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && fullScreenStatus) {
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.F11) && fullScreenStatus) {
             Gdx.graphics.setWindowedMode(1200,800);
             fullScreenStatus = false;
-        } else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && !fullScreenStatus) {
+        } else if(Gdx.input.isKeyJustPressed(Input.Keys.F11) && !fullScreenStatus) {
             Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
             fullScreenStatus = true;
         }
