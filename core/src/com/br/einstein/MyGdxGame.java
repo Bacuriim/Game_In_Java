@@ -1,6 +1,7 @@
 package com.br.einstein;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.br.einstein.characters.Character;
 
-public class MyGdxGame extends ApplicationAdapter {
+public class MyGdxGame extends Game {
 	SpriteBatch batch;
 	Texture imgE;
 	Texture imgD;

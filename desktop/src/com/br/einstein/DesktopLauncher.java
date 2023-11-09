@@ -2,6 +2,7 @@ package com.br.einstein;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.br.einstein.screen.ScreenManager;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {
@@ -13,6 +14,6 @@ public class DesktopLauncher {
 		config.setForegroundFPS(75);
 		config.setTitle("Game");
 		config.setWindowIcon("icon.png");
-		new Lwjgl3Application(new MyGdxGame(), config);
+		new Lwjgl3Application(new ScreenManager(), config);
 	}
 }
