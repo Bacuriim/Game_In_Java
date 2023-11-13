@@ -30,6 +30,7 @@ public class SelectionScreen implements Screen {
 
     private Stage stage;
     private Button returnButton;
+    private Button testButton;
     private TextButton.TextButtonStyle buttonStyle1;
 
 
@@ -48,14 +49,25 @@ public class SelectionScreen implements Screen {
         returnButton = new TextButton("Voltar", buttonStyle1);
         returnButton.setPosition(10, ScreenManager.V_HEIGTH - 20);
 
+        testButton = new TextButton("Teste", buttonStyle1);
+        testButton.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH / 2f);
+
 
         stage.addActor(returnButton);
+        stage.addActor(testButton);
         Gdx.input.setInputProcessor(stage);
 
         returnButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 returnScreen();
+            }
+        });
+
+        testButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                loadGame();
             }
         });
 
@@ -107,5 +119,10 @@ public class SelectionScreen implements Screen {
     public void returnScreen() {
         hide();
         game.setScreen(new MainMenuScreen(game));
+    }
+
+    public void loadGame() {
+        hide();
+        game.setScreen(new GameScreen(game));
     }
 }

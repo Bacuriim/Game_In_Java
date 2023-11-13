@@ -15,6 +15,8 @@ public class MyGdxGame extends Game {
 	Texture imgD;
 	Texture imgB;
 
+	private boolean inGame = false;
+
 	protected static boolean fullScreenStatus = true;
 
 	private Character character1 = new Character(700, 25 , Input.Keys.A , Input.Keys.D , Input.Keys.SPACE);
