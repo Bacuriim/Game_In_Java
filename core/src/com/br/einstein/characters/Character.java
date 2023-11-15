@@ -6,13 +6,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.br.einstein.MyGdxGame;
+import com.br.einstein.screen.ScreenManager;
 
 public class Character {
     private Vector2 velocity;
     private float before;
     protected float x;
     protected float y;
-
+    private float health;
     protected int left;
     protected int right;
     protected int space;
@@ -29,6 +30,7 @@ public class Character {
         this.left = left;
         this.right = right;
         this.space = space;
+        this.health = 100;
         velocity = new Vector2(0, -1); // Define a velocidade inicial como -1 na direção Y (gravidade para baixo).
     }
 
@@ -55,10 +57,10 @@ public class Character {
         }
         //walkRight
         if (Gdx.input.isKeyPressed(right)) {
-            if (x < Gdx.graphics.getWidth() - 350 && MyGdxGame.isFullScreenStatus()) {
+            if (x < Gdx.graphics.getWidth() - 350 && ScreenManager.isFullScreenStatus()) {
                 before = x;
                 x += 250 * Gdx.graphics.getDeltaTime();
-            } else if(x < Gdx.graphics.getWidth() + 350 && !MyGdxGame.isFullScreenStatus()) {
+            } else if(x < Gdx.graphics.getWidth() + 350 && !ScreenManager.isFullScreenStatus()) {
                 before = x;
                 x+= 250 * Gdx.graphics.getDeltaTime();
             }
@@ -68,9 +70,9 @@ public class Character {
             if((elapsedTime-lastTimeRight)<0.25f && elapsedTime-lastTimeDash>0.75f){
                 x += 10000 * Gdx.graphics.getDeltaTime();
                 lastTimeDash=elapsedTime;
-                if (x >= Gdx.graphics.getWidth() - 350 && MyGdxGame.isFullScreenStatus()) {
+                if (x >= Gdx.graphics.getWidth() - 350 && ScreenManager.isFullScreenStatus()) {
                     x = Gdx.graphics.getWidth() - 350;
-                } else if (x >= Gdx.graphics.getWidth() && !MyGdxGame.isFullScreenStatus()) {
+                } else if (x >= Gdx.graphics.getWidth() && !ScreenManager.isFullScreenStatus()) {
                     x = Gdx.graphics.getWidth() + 350;
                 }
             }
@@ -78,10 +80,10 @@ public class Character {
         }
         // walkLeft
         if (Gdx.input.isKeyPressed(left)) {
-            if (x > -135 && MyGdxGame.isFullScreenStatus()) {
+            if (x > -135 && ScreenManager.isFullScreenStatus()) {
                 before = x;
                 x -= 250 * Gdx.graphics.getDeltaTime();
-            } else if (x > -150 && !MyGdxGame.isFullScreenStatus()) {
+            } else if (x > -150 && !ScreenManager.isFullScreenStatus()) {
                 before = x;
                 x -= 250 * Gdx.graphics.getDeltaTime();
             }
@@ -91,9 +93,9 @@ public class Character {
             if((elapsedTime-lastTimeLeft)<0.25f && elapsedTime-lastTimeDash>0.75f){
                 x -= 10000 * Gdx.graphics.getDeltaTime();
                 lastTimeDash=elapsedTime;
-                if (x <= -150 && !MyGdxGame.isFullScreenStatus()) {
+                if (x <= -150 && !ScreenManager.isFullScreenStatus()) {
                     x = -150;
-                } else if (x <= -135 && MyGdxGame.isFullScreenStatus()) {
+                } else if (x <= -135 && ScreenManager.isFullScreenStatus()) {
                     x = -135;
                 }
             }
@@ -115,4 +117,10 @@ public class Character {
         return this.before;
     }
 
+    public float getHealth() {
+        if(this.health <= 0) {
+            return 0;
+        }
+        return this.health;
+    }
 }

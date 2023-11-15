@@ -9,8 +9,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.br.einstein.characters.Character;
 
 public class ScreenManager extends Game {
-    public static final int V_WIDTH = 400;
-    public static final int V_HEIGTH = 208;
+    public static final int V_WIDTH = 1920;
+    public static final int V_HEIGTH = 1080;
 
     SpriteBatch batch;
 
@@ -40,7 +40,7 @@ public class ScreenManager extends Game {
         super.render();
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.F11) && fullScreenStatus) {
-            Gdx.graphics.setWindowedMode(1200,800);
+            Gdx.graphics.setWindowedMode(1366,768);
             fullScreenStatus = false;
         } else if(Gdx.input.isKeyJustPressed(Input.Keys.F11) && !fullScreenStatus) {
             Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
@@ -48,10 +48,11 @@ public class ScreenManager extends Game {
         }
 
     }
-
     @Override
     public void dispose() {
         super.dispose();
         batch.dispose();
     }
 }
+
+
