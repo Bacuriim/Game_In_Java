@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -21,35 +22,35 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.BinaryHeap;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.br.einstein.mechanics.FontParameters;
 
 public class SelectionScreen implements Screen {
     private ScreenManager game;
-    private OrthographicCamera gamecam;
+    private OrthographicCamera gameCam;
     private Viewport viewport;
-    Texture texture;
+    public Texture texture;
+
+    private FontParameters fontParameters = new FontParameters();
 
     private Stage stage;
     private Button returnButton;
     private Button testButton;
-    private TextButton.TextButtonStyle buttonStyle1;
 
 
 
     public SelectionScreen(ScreenManager game) {
         this.game = game;
-        gamecam = new OrthographicCamera();
-        viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH, gamecam);
+        gameCam = new OrthographicCamera();
+        viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH, gameCam);
         stage = new Stage(viewport);
         texture = new Texture("icon.png");
 
-        buttonStyle1 = new TextButton.TextButtonStyle();
-        buttonStyle1.font = new BitmapFont();
-        buttonStyle1.fontColor = Color.WHITE;
 
-        returnButton = new TextButton("Voltar", buttonStyle1);
-        returnButton.setPosition(10, ScreenManager.V_HEIGTH - 20);
 
-        testButton = new TextButton("Teste", buttonStyle1);
+        returnButton = new TextButton("Voltar", fontParameters.getButtonStyle());
+        returnButton.setPosition(30, ScreenManager.V_HEIGTH - 100);
+
+        testButton = new TextButton("Teste", fontParameters.getButtonStyle());
         testButton.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH / 2f);
 
 

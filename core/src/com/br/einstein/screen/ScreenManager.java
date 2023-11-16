@@ -12,15 +12,9 @@ public class ScreenManager extends Game {
     public static final int V_WIDTH = 1920;
     public static final int V_HEIGTH = 1080;
 
-    SpriteBatch batch;
-
-    private boolean inGame = false;
+    public SpriteBatch batch;
 
     protected static boolean fullScreenStatus = true;
-
-    public boolean getInGame() {
-        return this.inGame;
-    }
 
     public static boolean isFullScreenStatus() {
         return fullScreenStatus;
