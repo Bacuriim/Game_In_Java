@@ -1,5 +1,6 @@
 package com.br.einstein.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,10 +18,10 @@ public class GameScreen implements Screen {
     private Viewport viewport;
 
 
-    SpriteBatch batch;
-    Texture imgE;
-    Texture imgD;
-    Texture imgB;
+    public SpriteBatch batch;
+    public Texture imgE;
+    public Texture imgD;
+    public Texture imgB;
 
     private Character character1 = new Character(700, 25 , Input.Keys.A , Input.Keys.D , Input.Keys.SPACE);
 
@@ -29,7 +30,7 @@ public class GameScreen implements Screen {
     public GameScreen(ScreenManager game) {
         this.game = game;
         gameCam = new OrthographicCamera();
-        viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH);
+        viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH, gameCam);
         batch = new SpriteBatch();
         imgE = new Texture("policialE.png");
         imgD = new Texture("policialD.png");
