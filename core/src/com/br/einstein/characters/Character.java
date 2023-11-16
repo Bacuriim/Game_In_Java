@@ -3,6 +3,7 @@ package com.br.einstein.characters;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.br.einstein.MyGdxGame;
 import com.br.einstein.screen.ScreenManager;
 
 public class Character {
@@ -10,7 +11,7 @@ public class Character {
     private float before;
     protected float x;
     protected float y;
-
+    private float health;
     protected int left;
     protected int right;
     protected int space;
@@ -38,6 +39,7 @@ public class Character {
         this.left = left;
         this.right = right;
         this.space = space;
+        this.health = 100;
         this.punch = punch;
         this.kick = kick;
         this.characterId = characterId;
@@ -198,4 +200,10 @@ public class Character {
         return this.before;
     }
 
+    public float getHealth() {
+        if(this.health <= 0) {
+            return 0;
+        }
+        return this.health;
+    }
 }
