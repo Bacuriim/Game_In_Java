@@ -3,10 +3,7 @@ package com.br.einstein.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -115,6 +112,7 @@ public class SelectionScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        fontParameters.dispose();
     }
 
     public void returnScreen() {
@@ -125,5 +123,6 @@ public class SelectionScreen implements Screen {
     public void loadGame() {
         hide();
         game.setScreen(new GameScreen(game));
+        Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
     }
 }

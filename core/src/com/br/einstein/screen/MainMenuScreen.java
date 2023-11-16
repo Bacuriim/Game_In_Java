@@ -134,6 +134,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         menuStage.dispose();
+        fontParameters.dispose();
     }
     public void loadSelection() {
         hide();

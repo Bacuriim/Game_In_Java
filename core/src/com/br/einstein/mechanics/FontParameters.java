@@ -58,4 +58,8 @@ public class FontParameters {
     public TextButton.TextButtonStyle getButtonStyle() {
         return this.buttonStyle;
     }
+
+    public void dispose() {
+        generator.dispose();
+    }
 }
