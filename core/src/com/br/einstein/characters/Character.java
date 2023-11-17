@@ -1,9 +1,12 @@
 package com.br.einstein.characters;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.br.einstein.MyGdxGame;
+import com.br.einstein.screen.GameScreen;
 import com.br.einstein.screen.ScreenManager;
 
 public class Character {
@@ -33,6 +36,12 @@ public class Character {
     private Texture imageBaseE;
     private Texture imageBaseD;
 
+    //
+    private Texture walkImage;
+    private Animation<TextureRegion> walkAnimation;
+    private float stateTime;
+    //
+
     public Character(float x, float y, int left, int right, int space, int punch, int kick, int characterId) {
         this.x = x;
         this.y = y;
@@ -44,6 +53,20 @@ public class Character {
         this.kick = kick;
         this.characterId = characterId;
         velocity = new Vector2(0, -1); // Define a velocidade inicial como -1 na direção Y (gravidade para baixo).
+
+        walkImage = new Texture("Iracema_soco_animation_D.png");
+
+        TextureRegion[] [] tmp = TextureRegion.split(walkImage, 270, 270);
+        TextureRegion[] walkFrames = new TextureRegion[9];
+        int index = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                walkFrames[index++] = tmp[i][j];
+            }
+        }
+
+        walkAnimation = new Animation<TextureRegion>(0.025f, walkFrames);
+        stateTime = 0;
     }
 
     public void update() {
@@ -118,7 +141,7 @@ public class Character {
         }
     }
 
-    public Texture getImage() {
+    public TextureRegion getImage() {
         if (x < before) {
             return characterAction("E");
         } else if (x > before) {
@@ -127,37 +150,40 @@ public class Character {
         return null;
     }
 
-    private Texture characterAction(String lado) {
+    private TextureRegion characterAction(String lado) {
+        TextureRegion currentFrame = walkAnimation.getKeyFrame(stateTime, true);
        if (Gdx.input.isKeyJustPressed(punch)) {
             if (lado == "E") {
-                return imagePunchE;
+                return null;
             } else if(lado == "D") {
-                return imagePunchD;
+                return currentFrame;
             }
        }
        if (Gdx.input.isKeyJustPressed(kick)) {
            if (lado == "E") {
-               return imageKickE;
+               return null;
            } else if (lado == "D") {
-               return imageKickD;
+               return null;
            }
        }
        if (Gdx.input.isKeyJustPressed(space)) {
            if (lado == "E") {
-               return imageJumpingE;
+               return null;
            } else if (lado == "D") {
-               return imageJumpingD;
+               return null;
            }
        }
        if (!Gdx.input.isKeyJustPressed(punch) && !Gdx.input.isKeyJustPressed(kick) && !Gdx.input.isKeyJustPressed(space)) {
            if (lado == "E") {
-               return imageBaseE;
+               return currentFrame;
            } else if (lado == "D") {
-               return imageBaseD;
+               return currentFrame;
            }
        }
        return null;
     }
+
+
 
     public void setSkin() {
         switch (characterId) {

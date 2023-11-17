@@ -5,18 +5,29 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.br.einstein.characters.Character;
+import org.lwjgl.system.CallbackI;
+
+import java.security.Key;
 
 public class GameScreen implements Screen {
     private ScreenManager game;
     private OrthographicCamera gameCam;
     private Viewport viewport;
 
+    // Tests for animation
+    private TextureRegion walk;
+    private Texture walkImage;
+    private Animation<TextureRegion> walkAnimation;
+    private float stateTime;
+    // a
 
     SpriteBatch batch;
     Texture imgE;
@@ -25,10 +36,6 @@ public class GameScreen implements Screen {
     Texture redGradient;
     Texture lightBrownGradient;
     Texture darkBrownGradient;
-    public SpriteBatch batch;
-    public Texture imgE;
-    public Texture imgD;
-    public Texture imgB;
 
     private Character character1 = new Character(700, 25, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N,1);
 
@@ -45,6 +52,22 @@ public class GameScreen implements Screen {
         redGradient = new Texture("redgradient.jpg");
         lightBrownGradient = new Texture ("lightbrowngradient.png");
         darkBrownGradient = new Texture("darkbrowngradient.png");
+
+
+        // Testing animations with sprite sheets
+        walkImage = new Texture("Iracema_soco_animation_D.png");
+
+        TextureRegion[] [] tmp = TextureRegion.split(walkImage, 270, 270);
+        TextureRegion[] walkFrames = new TextureRegion[9];
+        int index = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                walkFrames[index++] = tmp[i][j];
+            }
+        }
+
+        walkAnimation = new Animation<TextureRegion>(0.050f, walkFrames);
+        stateTime = 0;
 
     }
 
@@ -123,6 +146,15 @@ public class GameScreen implements Screen {
         batch.begin();
         batch.draw(getRedGradient(), ((float) ScreenManager.V_WIDTH*0.9f), (((float) ScreenManager.V_HEIGTH*0.945f)), -700 * character2.getHealth()/100, 50);
         batch.end();
+
+
+        // Tests for animation
+        stateTime += Gdx.graphics.getDeltaTime();
+
+        TextureRegion currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+        batch.begin();
+        batch.draw(currentFrame, 100, 100 , 450, 450);
+        batch.end();
     }
 
     @Override
@@ -148,7 +180,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
-        character1.getImage().dispose();
-        character2.getImage().dispose();
+        walkImage.dispose();
     }
 }
