@@ -12,7 +12,7 @@ public class DesktopLauncher {
 		config.useVsync(true);
 		config.setResizable(false);
 		config.setForegroundFPS(75);
-		config.setTitle("Game");
+		config.setTitle("StreetFortal");
 		config.setWindowIcon("icon.png");
 		new Lwjgl3Application(new ScreenManager(), config);
 	}

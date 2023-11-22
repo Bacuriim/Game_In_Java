@@ -6,16 +6,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.br.einstein.characters.Character;
-import org.lwjgl.system.CallbackI;
-
-import java.security.Key;
 
 public class GameScreen implements Screen {
     private ScreenManager game;
@@ -56,7 +52,6 @@ public class GameScreen implements Screen {
 
         // Testing animations with sprite sheets
         walkImage = new Texture("Iracema_soco_animation_D.png");
-
         TextureRegion[] [] tmp = TextureRegion.split(walkImage, 270, 270);
         TextureRegion[] walkFrames = new TextureRegion[9];
         int index = 0;
@@ -114,12 +109,13 @@ public class GameScreen implements Screen {
 
         // Desenhar o retângulo
         batch.begin();
-        batch.draw(character1.getImage() , character1.getX() , character1.getY() , 500 , 450);
+        batch.draw(character1.characterAction() , character1.getX() , character1.getY() , 500 , 450);
         batch.end();
 
         batch.begin();
-        batch.draw(character2.getImage() , character2.getX() , character2.getY() , 500 , 450);
+        batch.draw(character2.characterAction() , character2.getX() , character2.getY() , 500 , 450);
         batch.end();
+        flipImage();
 
         // Barra de Vida 1
         batch.begin();
@@ -151,10 +147,10 @@ public class GameScreen implements Screen {
         // Tests for animation
         stateTime += Gdx.graphics.getDeltaTime();
 
-        TextureRegion currentFrame = walkAnimation.getKeyFrame(stateTime, true);
-        batch.begin();
-        batch.draw(currentFrame, 100, 100 , 450, 450);
-        batch.end();
+//        TextureRegion currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+//        batch.begin();
+//        batch.draw(currentFrame, 100, 100 , 450, 450);
+//        batch.end();
     }
 
     @Override
@@ -181,5 +177,12 @@ public class GameScreen implements Screen {
     public void dispose() {
         batch.dispose();
         walkImage.dispose();
+    }
+
+    public void flipImage() {
+        if (character1.getX() > character2.getX()) {
+            character1.flip();
+            character2.flip();
+        }
     }
 }

@@ -51,7 +51,7 @@ public class MainMenuScreen implements Screen {
         //Creating labels
         logo = new Label("Street Fortal", fontParameters.getLabelStyle100());
         logo.setSize(100, 100);
-        logo.setPosition(ScreenManager.V_WIDTH / 2f - 350, ScreenManager.V_HEIGTH / 2f + 300);
+        logo.setPosition(ScreenManager.V_WIDTH / 2f - 125, ScreenManager.V_HEIGTH / 2f + 300, Align.center);
         menuStage.addActor(logo);
 
         madeBy = new Label("Made by\n     CCR", fontParameters.getLabelStyle50());

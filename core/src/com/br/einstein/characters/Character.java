@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.br.einstein.screen.GameScreen;
@@ -40,6 +41,9 @@ public class Character {
     private Texture walkImage;
     private Animation<TextureRegion> walkAnimation;
     private float stateTime;
+    private TextureRegion currentFrame;
+    public TextureRegion aaa;
+    private SpriteBatch batch;
     //
 
     public Character(float x, float y, int left, int right, int space, int punch, int kick, int characterId) {
@@ -66,7 +70,6 @@ public class Character {
         }
 
         walkAnimation = new Animation<TextureRegion>(0.025f, walkFrames);
-        stateTime = 0;
     }
 
     public void update() {
@@ -141,46 +144,28 @@ public class Character {
         }
     }
 
-    public TextureRegion getImage() {
-        if (x < before) {
-            return characterAction("E");
-        } else if (x > before) {
-            return characterAction("D");
-        }
-        return null;
-    }
+//    public TextureRegion getImage() {
+//        if (x < before) {
+//            return characterAction("E");
+//        } else if (x > before) {
+//            return characterAction("D");
+//        }
+//        return null;
+//    }
 
-    private TextureRegion characterAction(String lado) {
+    public TextureRegion characterAction() {
+        aaa = new TextureRegion(imageBaseD);
         TextureRegion currentFrame = walkAnimation.getKeyFrame(stateTime, true);
-       if (Gdx.input.isKeyJustPressed(punch)) {
-            if (lado == "E") {
-                return null;
-            } else if(lado == "D") {
-                return currentFrame;
-            }
-       }
-       if (Gdx.input.isKeyJustPressed(kick)) {
-           if (lado == "E") {
-               return null;
-           } else if (lado == "D") {
-               return null;
-           }
-       }
-       if (Gdx.input.isKeyJustPressed(space)) {
-           if (lado == "E") {
-               return null;
-           } else if (lado == "D") {
-               return null;
-           }
-       }
-       if (!Gdx.input.isKeyJustPressed(punch) && !Gdx.input.isKeyJustPressed(kick) && !Gdx.input.isKeyJustPressed(space)) {
-           if (lado == "E") {
-               return currentFrame;
-           } else if (lado == "D") {
-               return currentFrame;
-           }
-       }
-       return null;
+
+        if (Gdx.input.isKeyJustPressed(punch)) {
+
+        } else if (Gdx.input.isKeyJustPressed(kick)) {
+            return currentFrame;
+        } else if (Gdx.input.isKeyPressed(left) || Gdx.input.isKeyPressed(right)) {
+            return currentFrame;
+        }
+        stateTime = 0;
+        return aaa;
     }
 
 
@@ -231,5 +216,10 @@ public class Character {
             return 0;
         }
         return this.health;
+    }
+
+    public void flip() {
+        currentFrame.flip(true, false);
+
     }
 }

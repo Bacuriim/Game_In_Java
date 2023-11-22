@@ -1,9 +1,15 @@
 package com.br.einstein.mechanics;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetLoaderParameters;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -11,25 +17,40 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 public class FontParameters {
 
     private FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("MadHomie-K7RPA.ttf"));
-    private FreeTypeFontGenerator.FreeTypeFontParameter parameter50 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-    private FreeTypeFontGenerator.FreeTypeFontParameter parameter100 = new FreeTypeFontGenerator.FreeTypeFontParameter();
     private BitmapFont font50;
     private BitmapFont font100;
     private Label.LabelStyle labelStyle100;
     private Label.LabelStyle labelStyle50;
     private TextButton.TextButtonStyle buttonStyle;
+    private AssetManager manager;
 
     public FontParameters() {
-        //Setting parameters
-        parameter50.size = 50;
-        parameter50.borderWidth = 2;
-        parameter50.borderColor = Color.BLACK;
-        font50 = generator.generateFont(parameter50);
+        // Setting loader, AssetManager and parameters
+        manager = new AssetManager();
+        FileHandleResolver resolver = new InternalFileHandleResolver();
+        manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
+        manager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
 
-        parameter100.size = 100;
-        parameter100.borderWidth = 5;
-        parameter100.borderColor = Color.BLACK;
-        font100 = generator.generateFont(parameter100);
+        FreetypeFontLoader.FreeTypeFontLoaderParameter parms50 = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        FreetypeFontLoader.FreeTypeFontLoaderParameter parms100 = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        parms50.fontFileName = "MadHomie-K7RPA.ttf";
+        parms100.fontFileName = "MadHomie-K7RPA.ttf";
+
+        parms50.fontParameters.size = 50;
+        parms50.fontParameters.borderWidth = 2;
+        parms50.fontParameters.borderColor = Color.BLACK;
+
+        parms100.fontParameters.size = 100;
+
+        manager.load("MadHomie-K7RPA.ttf", BitmapFont.class, parms50);
+        manager.load("MadHomie-K7RPA.ttf", BitmapFont.class, parms100);
+
+        manager.finishLoading();
+
+        font50 = manager.get("MadHomie-K7RPA.ttf", BitmapFont.class);
+
+        font100 = manager.get("MadHomie-K7RPA.ttf", BitmapFont.class);
+
 
         //Setting styles
         labelStyle100 = new Label.LabelStyle();
@@ -61,5 +82,6 @@ public class FontParameters {
 
     public void dispose() {
         generator.dispose();
+        manager.dispose();
     }
 }
