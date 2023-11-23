@@ -32,19 +32,14 @@ public class FontParameters {
         manager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
 
         FreetypeFontLoader.FreeTypeFontLoaderParameter parms50 = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
-        FreetypeFontLoader.FreeTypeFontLoaderParameter parms100 = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         parms50.fontFileName = "MadHomie-K7RPA.ttf";
-        parms100.fontFileName = "MadHomie-K7RPA.ttf";
 
         parms50.fontParameters.size = 50;
         parms50.fontParameters.borderWidth = 2;
         parms50.fontParameters.borderColor = Color.BLACK;
 
-        parms100.fontParameters.size = 100;
 
         manager.load("MadHomie-K7RPA.ttf", BitmapFont.class, parms50);
-        manager.load("MadHomie-K7RPA.ttf", BitmapFont.class, parms100);
-
         manager.finishLoading();
 
         font50 = manager.get("MadHomie-K7RPA.ttf", BitmapFont.class);

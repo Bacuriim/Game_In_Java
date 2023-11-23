@@ -2,6 +2,7 @@ package com.br.einstein.screen;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -51,7 +52,7 @@ public class SelectionScreen implements Screen {
         testButton = new TextButton("Teste", fontParameters.getButtonStyle());
         testButton.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH / 2f);
 
-        TextureRegionDrawable texRegDraIra = new TextureRegionDrawable(new Texture("Iracema_head.png"));
+        TextureRegionDrawable texRegDraIra = new TextureRegionDrawable(new Texture("assets/IracemaSprites/Iracema_head.png"));
         iracemaChar = new ImageButton(texRegDraIra);
         iracemaChar.setPosition(ScreenManager.V_WIDTH / 5f, ScreenManager.V_HEIGTH / 3f, Align.center);
 
@@ -59,6 +60,8 @@ public class SelectionScreen implements Screen {
         stage.addActor(iracemaChar);
         stage.addActor(returnButton);
         stage.addActor(testButton);
+
+
         Gdx.input.setInputProcessor(stage);
 
         returnButton.addListener(new ChangeListener() {
@@ -109,12 +112,12 @@ public class SelectionScreen implements Screen {
         if (selected >= 1) {
             if (char1 == 1) {
                 game.batch.begin();
-                game.batch.draw(new Texture("Iracema_parada_D.png"),
+                game.batch.draw(new TextureRegion(new Texture("assets/IracemaSprites/Iracema_parada_D.png")),
                         ScreenManager.V_WIDTH / 20f - 350, ScreenManager.V_HEIGTH / 10f + 100, 750, 800);
                 game.batch.end();
             } if (char2 == 1) {
                 game.batch.begin();
-                game.batch.draw(new Texture("Iracema_parada_E.png"),
+                game.batch.draw(new TextureRegion(new Texture("assets/IracemaSprites/Iracema_parada_E.png")),
                         ScreenManager.V_WIDTH - 500, ScreenManager.V_HEIGTH / 10f + 100 , 750, 800);
                 game.batch.end();
             }

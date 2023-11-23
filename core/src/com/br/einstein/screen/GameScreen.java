@@ -23,9 +23,10 @@ public class GameScreen implements Screen {
     private Texture walkImage;
     private Animation<TextureRegion> walkAnimation;
     private float stateTime;
+
+    private boolean shouldFlip = false;
     // a
 
-    SpriteBatch batch;
     Texture imgE;
     Texture imgD;
     Texture imgB;
@@ -33,36 +34,23 @@ public class GameScreen implements Screen {
     Texture lightBrownGradient;
     Texture darkBrownGradient;
 
-    private Character character1 = new Character(700, 25, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N,1);
+    private Character character1 = new Character(400, 25, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N,1);
 
-    private Character character2 = new Character(700, 25, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.INSERT, Input.Keys.HOME, 2);
+    private Character character2 = new Character(100, 25, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.INSERT, Input.Keys.HOME, 2);
 
     public GameScreen(ScreenManager game) {
         this.game = game;
         gameCam = new OrthographicCamera();
         viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH, gameCam);
-        batch = new SpriteBatch();
         character1.setSkin();
         character2.setSkin();
-        imgB = new Texture("1_empxo5xvgaefru0-13999131.png");
-        redGradient = new Texture("redgradient.jpg");
-        lightBrownGradient = new Texture ("lightbrowngradient.png");
-        darkBrownGradient = new Texture("darkbrowngradient.png");
+        imgB = new Texture("assets/backgrounds/gameBackgrounds/castelao.png");
+        redGradient = new Texture("assets/hpBar/redgradient.jpg");
+        lightBrownGradient = new Texture ("assets/hpBar/lightbrowngradient.png");
+        darkBrownGradient = new Texture("assets/hpBar/darkbrowngradient.png");
 
 
-        // Testing animations with sprite sheets
-        walkImage = new Texture("Iracema_soco_animation_D.png");
-        TextureRegion[] [] tmp = TextureRegion.split(walkImage, 270, 270);
-        TextureRegion[] walkFrames = new TextureRegion[9];
-        int index = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                walkFrames[index++] = tmp[i][j];
-            }
-        }
 
-        walkAnimation = new Animation<TextureRegion>(0.050f, walkFrames);
-        stateTime = 0;
 
     }
 
@@ -95,62 +83,67 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+
     }
 
     @Override
     public void render(float delta) {
-        batch.begin();
+        game.batch.begin();
         ScreenUtils.clear(189/255f, 195/255f, 199/255f, 1);
-        batch.end();
+        game.batch.end();
 
         character1.update();
         character2.update();
 
+        game.batch.begin();
+        game.batch.draw(imgB, 0, 0, ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH);
+        game.batch.end();
+
 
         // Desenhar o retângulo
-        batch.begin();
-        batch.draw(character1.characterAction() , character1.getX() , character1.getY() , 500 , 450);
-        batch.end();
+        game.batch.begin();
+        game.batch.draw(character1.characterAction() ,
+                (shouldFlip ? 500 + character1.getX() : character1.getX()) , character1.getY() ,
+                (shouldFlip ? -500: 500) , 450);
+        game.batch.end();
 
-        batch.begin();
-        batch.draw(character2.characterAction() , character2.getX() , character2.getY() , 500 , 450);
-        batch.end();
-        flipImage();
+        game.batch.begin();
+        game.batch.draw(character2.characterAction() ,
+                (shouldFlip ? character2.getX() : 500 + character2.getX()) , character2.getY(),
+                (shouldFlip ? 500: -500), 450);
+        game.batch.end();
 
         // Barra de Vida 1
-        batch.begin();
-        batch.draw(getLightBrownGradient(), (((float) ScreenManager.V_WIDTH*0.1f)-5), (((float) ScreenManager.V_HEIGTH*0.945f)-5), 710, 60);
-        batch.end();
+        game.batch.begin();
+        game.batch.draw(getLightBrownGradient(), (((float) ScreenManager.V_WIDTH*0.1f)-5), (((float) ScreenManager.V_HEIGTH*0.945f)-5), 710, 60);
+        game.batch.end();
 
-        batch.begin();
-        batch.draw(getDarkBrownGradient(), ((float) ScreenManager.V_WIDTH*0.1f), (((float) ScreenManager.V_HEIGTH*0.945f)), 700, 50);
-        batch.end();
+        game.batch.begin();
+        game.batch.draw(getDarkBrownGradient(), ((float) ScreenManager.V_WIDTH*0.1f), (((float) ScreenManager.V_HEIGTH*0.945f)), 700, 50);
+        game.batch.end();
 
-        batch.begin();
-        batch.draw(getRedGradient(), ((float) ScreenManager.V_WIDTH*0.1f), (((float) ScreenManager.V_HEIGTH*0.945f)), 700 * character1.getHealth()/100, 50);
-        batch.end();
+        game.batch.begin();
+        game.batch.draw(getRedGradient(), ((float) ScreenManager.V_WIDTH*0.1f), (((float) ScreenManager.V_HEIGTH*0.945f)), 700 * character1.getHealth()/100, 50);
+        game.batch.end();
 
         // Barra de Vida 2
-        batch.begin();
-        batch.draw(getLightBrownGradient(), (((float) ScreenManager.V_WIDTH*0.9f)+5), (((float) ScreenManager.V_HEIGTH*0.945f)-5), -710, 60);
-        batch.end();
+        game.batch.begin();
+        game.batch.draw(getLightBrownGradient(), (((float) ScreenManager.V_WIDTH*0.9f)+5), (((float) ScreenManager.V_HEIGTH*0.945f)-5), -710, 60);
+        game.batch.end();
 
-        batch.begin();
-        batch.draw(getDarkBrownGradient(), ((float) ScreenManager.V_WIDTH*0.9f), (((float) ScreenManager.V_HEIGTH*0.945f)), -700, 50);
-        batch.end();
+        game.batch.begin();
+        game.batch.draw(getDarkBrownGradient(), ((float) ScreenManager.V_WIDTH*0.9f), (((float) ScreenManager.V_HEIGTH*0.945f)), -700, 50);
+        game.batch.end();
 
-        batch.begin();
-        batch.draw(getRedGradient(), ((float) ScreenManager.V_WIDTH*0.9f), (((float) ScreenManager.V_HEIGTH*0.945f)), -700 * character2.getHealth()/100, 50);
-        batch.end();
+        game.batch.begin();
+        game.batch.draw(getRedGradient(), ((float) ScreenManager.V_WIDTH*0.9f), (((float) ScreenManager.V_HEIGTH*0.945f)), -700 * character2.getHealth()/100, 50);
+        game.batch.end();
 
-
-        // Tests for animation
-        stateTime += Gdx.graphics.getDeltaTime();
-
-//        TextureRegion currentFrame = walkAnimation.getKeyFrame(stateTime, true);
-//        batch.begin();
-//        batch.draw(currentFrame, 100, 100 , 450, 450);
-//        batch.end();
+        if (character1.getX() > character2.getX()) {
+            shouldFlip = true;
+        } else {
+            shouldFlip = false;
+        }
     }
 
     @Override
@@ -175,14 +168,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        batch.dispose();
+        game.batch.dispose();
         walkImage.dispose();
-    }
-
-    public void flipImage() {
-        if (character1.getX() > character2.getX()) {
-            character1.flip();
-            character2.flip();
-        }
     }
 }

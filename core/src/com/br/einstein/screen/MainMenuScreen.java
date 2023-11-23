@@ -41,7 +41,7 @@ public class MainMenuScreen implements Screen {
         this.game = game;
         gameCam = new OrthographicCamera();
         viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH, gameCam);
-        texture = new Texture("1_empxo5xvgaefru0-13999131.png");
+        texture = new Texture("assets/backgrounds/mainMenuImage.png");
 
 
         //Setting stage
