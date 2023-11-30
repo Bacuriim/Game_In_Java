@@ -40,7 +40,7 @@ public class GameScreen implements Screen {
 
     private Character character1 = new Character(1600, 26, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N,1);
 
-    private Character character2 = new Character(-180, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.INSERT, Input.Keys.HOME, 2);
+    private Character character2 = new Character(-180, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.NUMPAD_2, Input.Keys.NUMPAD_3, 2);
 
     public GameScreen(ScreenManager game, String arena) {
         this.game = game;
@@ -103,7 +103,7 @@ public class GameScreen implements Screen {
         game.batch.end();
 
 
-        if (roundTime > 2) {
+        if (roundTime > 3) {
             character1.update();
             character2.update();
             stage.clear();
@@ -116,13 +116,13 @@ public class GameScreen implements Screen {
 
         // Desenhar o retângulo
         game.batch.begin();
-        game.batch.draw((roundTime > 2 ? character1.characterAction() : character1.idle) ,
+        game.batch.draw((roundTime > 3 ? character1.characterAction() : character1.idle) ,
                 (shouldFlip ? 500 + character1.getX() : character1.getX()) , character1.getY() ,
                 (shouldFlip ? -500: 500) , 450);
         game.batch.end();
 
         game.batch.begin();
-        game.batch.draw((roundTime > 2 ? character2.characterAction() : character2.idle) ,
+        game.batch.draw((roundTime > 3 ? character2.characterAction() : character2.idle) ,
                 (shouldFlip ? character2.getX() : 500 + character2.getX()) , character2.getY(),
                 (shouldFlip ? 500: -500), 450);
         game.batch.end();
