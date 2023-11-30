@@ -38,9 +38,9 @@ public class GameScreen implements Screen {
     Texture lightBrownGradient;
     Texture darkBrownGradient;
 
-    private Character character1 = new Character(1600, 250, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N,1);
+    private Character character1 = new Character(1600, 26, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N,1);
 
-    private Character character2 = new Character(-180, 250, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.INSERT, Input.Keys.HOME, 2);
+    private Character character2 = new Character(-180, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.INSERT, Input.Keys.HOME, 2);
 
     public GameScreen(ScreenManager game, String arena) {
         this.game = game;
@@ -53,7 +53,7 @@ public class GameScreen implements Screen {
         lightBrownGradient = new Texture ("assets/hpBar/lightbrowngradient.png");
         darkBrownGradient = new Texture("assets/hpBar/darkbrowngradient.png");
 
-        roundLabel = new Label("Round 1", fontParameters.getLabelStyle50());
+        roundLabel = new Label("Round " + round, fontParameters.getLabelStyle50());
         roundLabel.setPosition(ScreenManager.V_WIDTH / 2f - 100, ScreenManager.V_HEIGTH / 2f);
         roundLabel.setAlignment(Align.center);
         stage = new Stage(viewport);
@@ -102,8 +102,12 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(189/255f, 195/255f, 199/255f, 1);
         game.batch.end();
 
-        character1.update();
-        character2.update();
+
+        if (roundTime > 2) {
+            character1.update();
+            character2.update();
+            stage.clear();
+        }
 
         game.batch.begin();
         game.batch.draw(imgB, 0, 0, ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH);
@@ -112,13 +116,13 @@ public class GameScreen implements Screen {
 
         // Desenhar o retângulo
         game.batch.begin();
-        game.batch.draw(character1.characterAction() ,
+        game.batch.draw((roundTime > 2 ? character1.characterAction() : character1.idle) ,
                 (shouldFlip ? 500 + character1.getX() : character1.getX()) , character1.getY() ,
                 (shouldFlip ? -500: 500) , 450);
         game.batch.end();
 
         game.batch.begin();
-        game.batch.draw(character2.characterAction() ,
+        game.batch.draw((roundTime > 2 ? character2.characterAction() : character2.idle) ,
                 (shouldFlip ? character2.getX() : 500 + character2.getX()) , character2.getY(),
                 (shouldFlip ? 500: -500), 450);
         game.batch.end();

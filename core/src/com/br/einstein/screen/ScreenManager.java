@@ -18,7 +18,6 @@ public class ScreenManager extends Game {
     public static boolean isFullScreenStatus() {
         return fullScreenStatus;
     }
-    private AssetManager manager;
 
 
     @Override

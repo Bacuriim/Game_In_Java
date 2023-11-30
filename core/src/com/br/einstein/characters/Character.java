@@ -45,7 +45,7 @@ public class Character {
     private float stateTime;
     private TextureRegion currentFrame;
     private TextureRegion currentWalkFrame;
-    public TextureRegion idle;
+    public TextureRegion idle = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_parada_D.png"));
     private SpriteBatch batch;
     //
 
@@ -167,7 +167,6 @@ public class Character {
 //    }
 
     public TextureRegion characterAction() {
-        idle = new TextureRegion(imageBaseD);
         TextureRegion currentFrame = punchAnimation.getKeyFrame(stateTime, true);
         currentWalkFrame = walkAnimation.getKeyFrame(stateTime, true);
         stateTime += Gdx.graphics.getDeltaTime();

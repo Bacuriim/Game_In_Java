@@ -32,7 +32,9 @@ public class SelectionScreen implements Screen {
     private Stage stage;
     private Button returnButton;
     private ImageButton castelaoButton;
+    private ImageButton estacionamentoButton;
     private ImageButton iracemaChar;
+    private Button lutar;
 
     private int char1;
     private int char2;
@@ -61,8 +63,18 @@ public class SelectionScreen implements Screen {
 
         TextureRegionDrawable texCast = new TextureRegionDrawable(new Texture("assets/backgrounds/gameBackgrounds/castelao.png"));
         castelaoButton = new ImageButton(texCast);
-        castelaoButton.setPosition(ScreenManager.V_WIDTH / 2f - 50, ScreenManager.V_HEIGTH / 2f);
+        castelaoButton.setPosition(ScreenManager.V_WIDTH / 2f - 100, ScreenManager.V_HEIGTH / 2f);
         castelaoButton.setSize(100, 100);
+
+        TextureRegionDrawable texEst = new TextureRegionDrawable(new Texture("assets/backgrounds/gameBackgrounds/estacionamento.png"));
+        estacionamentoButton = new ImageButton(texEst);
+        estacionamentoButton.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH /2f);
+        estacionamentoButton.setSize(100, 100);
+
+
+
+        lutar = new TextButton("Lutar", fontParameters.getButtonStyle());
+        lutar.setPosition(ScreenManager.V_WIDTH / 2f, 100, Align.center);
 
 
         stage.addActor(iracemaChar);
@@ -91,13 +103,14 @@ public class SelectionScreen implements Screen {
             }
         });
 
-        castelaoButton.addListener(new ChangeListener() {
+        lutar.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                arena = "assets/backgrounds/gameBackgrounds/castelao.png";
-                selected++;
+                selected = 0;
+                loadGame();
             }
         });
+
     }
 
     public int getChar1() {
@@ -142,28 +155,33 @@ public class SelectionScreen implements Screen {
 
         if (selected == 2) {
             stage.clear();
+            stage.addActor(returnButton);
             stage.addActor(castelaoButton);
-            System.out.println("2");
+            stage.addActor(estacionamentoButton);
+
             if (castelaoButton.isOver()) {
                 t = "assets/backgrounds/gameBackgrounds/castelao.png";
+            } else if (estacionamentoButton.isOver()) {
+                t = "assets/backgrounds/gameBackgrounds/estacionamento.png";
             } else {
                 t = "icon.png";
+            }
+
+            if (castelaoButton.isPressed()) {
+                arena = "assets/backgrounds/gameBackgrounds/castelao.png";
+                t = "assets/backgrounds/gameBackgrounds/castelao.png";
+                selected++;
+            }
+
+            if (estacionamentoButton.isPressed()) {
+                arena = "assets/backgrounds/gameBackgrounds/estacionamento.png";
+                t = "assets/backgrounds/gameBackgrounds/estacionamento.png";
+                selected++;
             }
         }
 
         if (selected == 3) {
-            System.out.println("3");
-            Button lutar = new TextButton("Lutar", fontParameters.getButtonStyle());
-            lutar.setPosition(ScreenManager.V_WIDTH / 2f, 100, Align.center);
             stage.addActor(lutar);
-
-            lutar.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    selected = 0;
-                    loadGame();
-                }
-            });
         }
     }
 
