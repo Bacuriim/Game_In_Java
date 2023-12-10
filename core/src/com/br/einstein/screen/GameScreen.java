@@ -29,6 +29,7 @@ public class GameScreen implements Screen {
     private float roundTime = 0;
     private Label roundLabel;
     private Stage stage;
+    private boolean isGameRunning = true;
 
 
     Texture imgE;
@@ -103,7 +104,7 @@ public class GameScreen implements Screen {
         game.batch.end();
 
 
-        if (roundTime > 2) {
+        if (roundTime > 2 && isGameRunning) {
             character1.update();
             character2.update();
             stage.clear();
@@ -116,13 +117,13 @@ public class GameScreen implements Screen {
 
         // Desenhar o retângulo
         game.batch.begin();
-        game.batch.draw((roundTime > 2 ? character1.characterAction() : character1.idle) ,
+        game.batch.draw((roundTime > 2 && isGameRunning ? character1.characterAction() : character1.idle) ,
                 (shouldFlip ? 500 + character1.getX() : character1.getX()) , character1.getY() ,
                 (shouldFlip ? -500: 500) , 450);
         game.batch.end();
 
         game.batch.begin();
-        game.batch.draw((roundTime > 2 ? character2.characterAction() : character2.idle) ,
+        game.batch.draw((roundTime > 2 && isGameRunning? character2.characterAction() : character2.idle) ,
                 (shouldFlip ? character2.getX() : 500 + character2.getX()) , character2.getY(),
                 (shouldFlip ? 500: -500), 450);
         game.batch.end();
@@ -160,6 +161,16 @@ public class GameScreen implements Screen {
             shouldFlip = true;
         } else {
             shouldFlip = false;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            isGameRunning = !isGameRunning;
+        }
+
+        if (!isGameRunning) {
+            game.batch.begin();
+            Gdx.gl.glBlendColor(0f, 0f, 0f, 0.5f);
+            game.batch.end();
         }
     }
 
