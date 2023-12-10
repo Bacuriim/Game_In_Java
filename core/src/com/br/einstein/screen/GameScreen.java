@@ -3,13 +3,19 @@ package com.br.einstein.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -30,6 +36,10 @@ public class GameScreen implements Screen {
     private Label roundLabel;
     private Stage stage;
     private boolean isGameRunning = true;
+    private Sprite spritePause = new Sprite(new Texture("assets/backgrounds/pause.png"));
+    private Button menuButton;
+    private Button quitButton;
+    private Button resumeButton;
 
 
     Texture imgE;
@@ -39,9 +49,9 @@ public class GameScreen implements Screen {
     Texture lightBrownGradient;
     Texture darkBrownGradient;
 
-    private Character character1 = new Character(1600, 26, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N,1);
+    private Character character1 = new Character(-180, 26, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N,1);
 
-    private Character character2 = new Character(-180, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.INSERT, Input.Keys.HOME, 2);
+    private Character character2 = new Character(1600, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.NUMPAD_2, Input.Keys.NUMPAD_3, 2);
 
     public GameScreen(ScreenManager game, String arena) {
         this.game = game;
@@ -53,33 +63,48 @@ public class GameScreen implements Screen {
         redGradient = new Texture("assets/hpBar/redgradient.jpg");
         lightBrownGradient = new Texture ("assets/hpBar/lightbrowngradient.png");
         darkBrownGradient = new Texture("assets/hpBar/darkbrowngradient.png");
+        spritePause.setAlpha(0.7f);
+
+        menuButton = new TextButton("Menu", fontParameters.getButtonStyle());
+        menuButton.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH / 2f, Align.center);
+
+        quitButton = new TextButton("Sair", fontParameters.getButtonStyle());
+        quitButton.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH / 2f - 100, Align.center);
+
+        resumeButton = new TextButton("Retornar", fontParameters.getButtonStyle());
+        resumeButton.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH / 2f + 100, Align.center);
 
         roundLabel = new Label("Round " + round, fontParameters.getLabelStyle50());
         roundLabel.setPosition(ScreenManager.V_WIDTH / 2f - 100, ScreenManager.V_HEIGTH / 2f);
         roundLabel.setAlignment(Align.center);
         stage = new Stage(viewport);
         stage.addActor(roundLabel);
+        Gdx.input.setInputProcessor(stage);
 
 
+        menuButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                hide();
+                returnMenu();
+            }
+        });
+
+        quitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                quit();
+            }
+        });
+
+        resumeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                isGameRunning = !isGameRunning;
+            }
+        });
     }
 
-    public Texture getImage1() {
-        if (character1.getX() < character1.getBefore()) {
-            return imgE;
-        } else if (character1.getX() > character1.getBefore()) {
-            return imgD;
-        }
-        return null;
-    }
-
-    public Texture getImage2() {
-        if (character2.getX() < character2.getBefore()) {
-            return imgE;
-        } else if (character2.getX() > character2.getBefore()) {
-            return imgD;
-        }
-        return null;
-    }
     public Texture getRedGradient(){
         return redGradient;
     }
@@ -163,14 +188,19 @@ public class GameScreen implements Screen {
             shouldFlip = false;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && roundTime > 2) {
             isGameRunning = !isGameRunning;
         }
 
         if (!isGameRunning) {
+            Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);
             game.batch.begin();
-            Gdx.gl.glBlendColor(0f, 0f, 0f, 0.5f);
+            spritePause.draw(game.batch);
             game.batch.end();
+
+            stage.addActor(resumeButton);
+            stage.addActor(menuButton);
+            stage.addActor(quitButton);
         }
     }
 
@@ -197,5 +227,13 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         game.batch.dispose();
+    }
+
+    public void returnMenu() {
+        game.setScreen(new MainMenuScreen(game));
+    }
+
+    public void quit() {
+        Gdx.app.exit();
     }
 }

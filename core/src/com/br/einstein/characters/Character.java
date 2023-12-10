@@ -39,6 +39,8 @@ public class Character {
     private Animation<TextureRegion> walkAnimation;
     private Animation<TextureRegion> jumpAnimation;
     private float stateTime;
+    private boolean isPunching = false;
+    private boolean isKicking = false;
     private TextureRegion currentFrame;
     private TextureRegion currentWalkFrame;
     private TextureRegion currentKickFrame;
@@ -95,7 +97,7 @@ public class Character {
             }
         }
         k = 0;
-        kickAnimation = new Animation<TextureRegion>(0.1f, kickFrames);
+        kickAnimation = new Animation<TextureRegion>(0.12f, kickFrames);
 
         //jump animation
         jumpImage = new Texture("assets/IracemaSprites/Iracema_pulando_D.png");
@@ -133,7 +135,7 @@ public class Character {
             }
         }
         //walkRight
-        if (Gdx.input.isKeyPressed(right)) {
+        if (Gdx.input.isKeyPressed(right) && (!isPunching && !isKicking)) {
             if (x < Gdx.graphics.getWidth() - 350 && ScreenManager.isFullScreenStatus()) {
                 before = x;
                 x += 250 * Gdx.graphics.getDeltaTime();
@@ -143,7 +145,7 @@ public class Character {
             }
         }
         // dashRight
-        if (Gdx.input.isKeyJustPressed(right)){
+        if (Gdx.input.isKeyJustPressed(right) && (!isPunching && !isKicking)){
             if((elapsedTime-lastTimeRight) < 0.25f && elapsedTime-lastTimeDash > 0.75f){
                 x += 10000 * Gdx.graphics.getDeltaTime();
                 lastTimeDash=elapsedTime;
@@ -156,7 +158,7 @@ public class Character {
             lastTimeRight=elapsedTime;
         }
         // walkLeft
-        if (Gdx.input.isKeyPressed(left)) {
+        if (Gdx.input.isKeyPressed(left) && (!isPunching && !isKicking)) {
             if (x > -135 && ScreenManager.isFullScreenStatus()) {
                 before = x;
                 x -= 250 * Gdx.graphics.getDeltaTime();
@@ -166,7 +168,7 @@ public class Character {
             }
         }
         // dashLeft
-        if (Gdx.input.isKeyJustPressed(left)){
+        if (Gdx.input.isKeyJustPressed(left) && (!isPunching && !isKicking)){
             if((elapsedTime-lastTimeLeft) < 0.25f && elapsedTime-lastTimeDash > 0.75f){
                 x -= 10000 * Gdx.graphics.getDeltaTime();
                 lastTimeDash=elapsedTime;
@@ -193,34 +195,32 @@ public class Character {
 //    }
 
     public TextureRegion characterAction() {
-        TextureRegion[] [] kickMat = TextureRegion.split(kickImage, 270, 270);
-        TextureRegion[] kickFrames = new TextureRegion[4];
-        int k = 0;
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                kickFrames[k++] = kickMat[i] [j];
-            }
-        }
-        k = 0;
-        kickAnimation = new Animation<TextureRegion>(0.1f, kickFrames);
         currentFrame = punchAnimation.getKeyFrame(stateTime, true);
         currentWalkFrame = walkAnimation.getKeyFrame(stateTime, true);
         currentKickFrame = kickAnimation.getKeyFrame(stateTime,false);
         currentJumpFrame = jumpAnimation.getKeyFrame(stateTime, false);
         stateTime += Gdx.graphics.getDeltaTime();
 
-        if (Gdx.input.isKeyJustPressed(punch)) {
-
-        } else if (Gdx.input.isKeyJustPressed(kick)) {
-            for (TextureRegion texture : kickFrames) {
-                for (int i = 0 ; i < 100000 ; i++) {
-                    return kickAnimation.getKeyFrame(stateTime, false);
-                }
+        if (isPunching) {
+            if (stateTime >= walkAnimation.getAnimationDuration()) {
+                isPunching = false;
+            } else{
+                return currentWalkFrame;
             }
+        } else if (isKicking) {
+            if (stateTime >= kickAnimation.getAnimationDuration()) {
+                isKicking = false;
+            } else{
+                return currentKickFrame;
+            }
+        }
+
+        if (Gdx.input.isKeyJustPressed(punch)) {
+            isPunching = true;
+        } else if (Gdx.input.isKeyJustPressed(kick)) {
+            isKicking = true;
         } else if (Gdx.input.isKeyPressed(left) || Gdx.input.isKeyPressed(right)) {
             return currentWalkFrame;
-        } else if (Gdx.input.isKeyPressed(jump)) {
-            return currentJumpFrame;
         }
         stateTime = 0;
         return idle;
