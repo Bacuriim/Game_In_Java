@@ -40,30 +40,34 @@ public class GameScreen implements Screen {
     private Button menuButton;
     private Button quitButton;
     private Button resumeButton;
-
-
-    Texture imgE;
-    Texture imgD;
     Texture imgB;
     Texture redGradient;
     Texture lightBrownGradient;
     Texture darkBrownGradient;
 
-    private Character character1 = new Character(-180, 26, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N,1);
+    private int char1;
+    private int char2;
 
-    private Character character2 = new Character(1600, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.NUMPAD_2, Input.Keys.NUMPAD_3, 2);
+    private Character character1;
 
-    public GameScreen(ScreenManager game, String arena) {
+    private Character character2;
+
+    public GameScreen(ScreenManager game, String arena, int char1, int char2) {
         this.game = game;
+        this.char1 = char1;
+        this.char2 = char2;
         gameCam = new OrthographicCamera();
         viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH, gameCam);
+
+        character1 = new Character(-180, 26, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N,char1);
+        character2 = new Character(1600, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.NUMPAD_2, Input.Keys.NUMPAD_3, char2);
         character1.setSkin();
         character2.setSkin();
         imgB = new Texture(arena);
         redGradient = new Texture("assets/hpBar/redgradient.jpg");
         lightBrownGradient = new Texture ("assets/hpBar/lightbrowngradient.png");
         darkBrownGradient = new Texture("assets/hpBar/darkbrowngradient.png");
-        spritePause.setAlpha(0.7f);
+        spritePause.setAlpha(0.4f);
 
         menuButton = new TextButton("Menu", fontParameters.getButtonStyle());
         menuButton.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH / 2f, Align.center);
@@ -122,6 +126,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
         roundTime += Gdx.graphics.getDeltaTime();
 
         game.batch.begin();
@@ -142,13 +147,13 @@ public class GameScreen implements Screen {
 
         // Desenhar o retângulo
         game.batch.begin();
-        game.batch.draw((roundTime > 2 && isGameRunning ? character1.characterAction() : character1.idle) ,
+        game.batch.draw((roundTime > 2 && isGameRunning ? character1.characterAction() : character1.getIdle()) ,
                 (shouldFlip ? 500 + character1.getX() : character1.getX()) , character1.getY() ,
                 (shouldFlip ? -500: 500) , 450);
         game.batch.end();
 
         game.batch.begin();
-        game.batch.draw((roundTime > 2 && isGameRunning? character2.characterAction() : character2.idle) ,
+        game.batch.draw((roundTime > 2 && isGameRunning? character2.characterAction() : character2.getIdle()) ,
                 (shouldFlip ? character2.getX() : 500 + character2.getX()) , character2.getY(),
                 (shouldFlip ? 500: -500), 450);
         game.batch.end();

@@ -33,21 +33,19 @@ public class Character {
     private Texture punchImage;
     private Texture kickImage;
     private Texture walkImage;
-    private Texture jumpImage;
     private Animation<TextureRegion> punchAnimation;
     private Animation<TextureRegion> kickAnimation;
     private Animation<TextureRegion> walkAnimation;
-    private Animation<TextureRegion> jumpAnimation;
     private float stateTime;
     private boolean isPunching = false;
     private boolean isKicking = false;
-    private TextureRegion currentFrame;
+    private TextureRegion currentPunchFrame;
     private TextureRegion currentWalkFrame;
     private TextureRegion currentKickFrame;
-    private TextureRegion currentJumpFrame;
-    public TextureRegion idle;
-    private SpriteBatch batch;
-    //
+    private TextureRegion idle;
+    private TextureRegion jumping;
+
+
 
     public Character(float x, float y, int left, int right, int space, int punch, int kick, int characterId) {
         this.x = x;
@@ -61,56 +59,125 @@ public class Character {
         this.characterId = characterId;
         velocity = new Vector2(0, -1); // Define a velocidade inicial como -1 na direção Y (gravidade para baixo).
 
-        punchImage = new Texture("assets/IracemaSprites/Iracema_soco_animation_D.png");
-        TextureRegion[] [] tmp = TextureRegion.split(punchImage, 270, 270);
-        TextureRegion[] punchFrames = new TextureRegion[9];
-        int k = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                punchFrames[k++] = tmp[i][j];
+        if (characterId == 1) {
+            punchImage = new Texture("assets/IracemaSprites/Iracema_soco_animation_D.png");
+            TextureRegion[] [] tmp = TextureRegion.split(punchImage, 270, 270);
+            TextureRegion[] punchFrames = new TextureRegion[9];
+            int k = 0;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    punchFrames[k++] = tmp[i][j];
+                }
             }
-        }
-        k = 0;
-        punchAnimation = new Animation<TextureRegion>(0.025f, punchFrames);
+            k = 0;
+            punchAnimation = new Animation<TextureRegion>(0.025f, punchFrames);
 
 
-        //walk aniamtion
-        walkImage = new Texture("assets/IracemaSprites/Iracema_walking_animation.png");
+            //walk aniamtion
+            walkImage = new Texture("assets/IracemaSprites/Iracema_walking_animation.png");
 
-        TextureRegion[] [] walkMat = TextureRegion.split(walkImage, 270, 270);
-        TextureRegion[] walkFrames =  new TextureRegion[3];
-        for (int i = 0; i < 3; i++) {
-            walkFrames[k++] = walkMat[0] [i];
-        }
-        k = 0;
-        walkAnimation = new Animation<TextureRegion>(0.1f, walkFrames);
-
-
-        //kick animation
-        kickImage = new Texture("assets/IracemaSprites/iracema_chutando.png");
-
-        TextureRegion[] [] kickMat = TextureRegion.split(kickImage, 270, 270);
-        TextureRegion[] kickFrames = new TextureRegion[4];
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                kickFrames[k++] = kickMat[i] [j];
+            TextureRegion[] [] walkMat = TextureRegion.split(walkImage, 270, 270);
+            TextureRegion[] walkFrames =  new TextureRegion[3];
+            for (int i = 0; i < 3; i++) {
+                walkFrames[k++] = walkMat[0] [i];
             }
-        }
-        k = 0;
-        kickAnimation = new Animation<TextureRegion>(0.12f, kickFrames);
+            k = 0;
+            walkAnimation = new Animation<TextureRegion>(0.1f, walkFrames);
 
-        //jump animation
-        jumpImage = new Texture("assets/IracemaSprites/Iracema_pulando_D.png");
 
-        TextureRegion[] [] jumpMat = TextureRegion.split(jumpImage, 270, 270);
-        TextureRegion[] jumpFrames = new TextureRegion[4];
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                jumpFrames[k++] = jumpMat[i] [j];
+            //kick animation
+            kickImage = new Texture("assets/IracemaSprites/iracema_chutando.png");
+
+            TextureRegion[] [] kickMat = TextureRegion.split(kickImage, 270, 270);
+            TextureRegion[] kickFrames = new TextureRegion[4];
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < 2; j++) {
+                    kickFrames[k++] = kickMat[i] [j];
+                }
             }
+            k = 0;
+            kickAnimation = new Animation<TextureRegion>(0.12f, kickFrames);
+        } else if (characterId == 2) {
+            punchImage = new Texture("assets/LoiraSprites/Loira_Socando_D.png");
+            TextureRegion[] [] tmp = TextureRegion.split(punchImage, 270, 270);
+            TextureRegion[] punchFrames = new TextureRegion[4];
+            int k = 0;
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < 2; j++) {
+                    punchFrames[k++] = tmp[i][j];
+                }
+            }
+            k = 0;
+            punchAnimation = new Animation<TextureRegion>(0.075f, punchFrames);
+
+
+            //walk aniamtion
+            walkImage = new Texture("assets/LoiraSprites/Loira_Andando_D.png");
+
+            TextureRegion[] [] walkMat = TextureRegion.split(walkImage, 270, 270);
+            TextureRegion[] walkFrames =  new TextureRegion[6];
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 2; j++) {
+                    walkFrames[k++] = walkMat[i] [j];
+                }
+            }
+            k = 0;
+            walkAnimation = new Animation<TextureRegion>(0.1f, walkFrames);
+
+
+            //kick animation
+            kickImage = new Texture("assets/LoiraSprites/Loira_Chutando_D.png");
+
+            TextureRegion[] [] kickMat = TextureRegion.split(kickImage, 270, 270);
+            TextureRegion[] kickFrames = new TextureRegion[6];
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 2; j++) {
+                    kickFrames[k++] = kickMat[i] [j];
+                }
+            }
+            k = 0;
+            kickAnimation = new Animation<TextureRegion>(0.12f, kickFrames);
+        } else if (characterId == 3) {
+            punchImage = new Texture("assets/SartoSprites/Sarto_Socando.png");
+            TextureRegion[] [] tmp = TextureRegion.split(punchImage, 270, 270);
+            TextureRegion[] punchFrames = new TextureRegion[4];
+            int k = 0;
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < 2; j++) {
+                    punchFrames[k++] = tmp[i][j];
+                }
+            }
+            k = 0;
+            punchAnimation = new Animation<TextureRegion>(0.075f, punchFrames);
+
+
+            //walk aniamtion
+            walkImage = new Texture("assets/SartoSprites/Sarto_Andando.png");
+
+            TextureRegion[] [] walkMat = TextureRegion.split(walkImage, 270, 270);
+            TextureRegion[] walkFrames =  new TextureRegion[6];
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 2; j++) {
+                    walkFrames[k++] = walkMat[i] [j];
+                }
+            }
+            k = 0;
+            walkAnimation = new Animation<TextureRegion>(0.1f, walkFrames);
+
+
+            //kick animation
+            kickImage = new Texture("assets/SartoSprites/Sarto_Chutando.png");
+
+            TextureRegion[] [] kickMat = TextureRegion.split(kickImage, 270, 270);
+            TextureRegion[] kickFrames = new TextureRegion[4];
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < 2; j++) {
+                    kickFrames[k++] = kickMat[i] [j];
+                }
+            }
+            k = 0;
+            kickAnimation = new Animation<TextureRegion>(0.12f, kickFrames);
         }
-        k = 0;
-        jumpAnimation = new Animation<TextureRegion>(0.1f, jumpFrames);
     }
 
     public void update() {
@@ -185,32 +252,22 @@ public class Character {
         }
     }
 
-//    public TextureRegion getImage() {
-//        if (x < before) {
-//            return characterAction("E");
-//        } else if (x > before) {
-//            return characterAction("D");
-//        }
-//        return null;
-//    }
-
     public TextureRegion characterAction() {
-        currentFrame = punchAnimation.getKeyFrame(stateTime, true);
+        currentPunchFrame = punchAnimation.getKeyFrame(stateTime, true);
         currentWalkFrame = walkAnimation.getKeyFrame(stateTime, true);
         currentKickFrame = kickAnimation.getKeyFrame(stateTime,false);
-        currentJumpFrame = jumpAnimation.getKeyFrame(stateTime, false);
         stateTime += Gdx.graphics.getDeltaTime();
 
         if (isPunching) {
-            if (stateTime >= walkAnimation.getAnimationDuration()) {
+            if (stateTime >= punchAnimation.getAnimationDuration()) {
                 isPunching = false;
-            } else{
-                return currentWalkFrame;
+            } else {
+                return currentPunchFrame;
             }
         } else if (isKicking) {
             if (stateTime >= kickAnimation.getAnimationDuration()) {
                 isKicking = false;
-            } else{
+            } else {
                 return currentKickFrame;
             }
         }
@@ -219,9 +276,16 @@ public class Character {
             isPunching = true;
         } else if (Gdx.input.isKeyJustPressed(kick)) {
             isKicking = true;
-        } else if (Gdx.input.isKeyPressed(left) || Gdx.input.isKeyPressed(right)) {
+        } else if ((Gdx.input.isKeyPressed(left) || Gdx.input.isKeyPressed(right)) && y < 27) {
             return currentWalkFrame;
         }
+
+        if (y >= 27) {
+            idle = jumping;
+        } else {
+            setSkin();
+        }
+
         stateTime = 0;
         return idle;
     }
@@ -232,9 +296,15 @@ public class Character {
         switch (characterId) {
             case 1:
                 idle = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_parada_D.png"));
+                jumping = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_pulo.png"));
                 break;
             case 2:
-                idle = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_parada_D.png"));
+                idle = new TextureRegion(new Texture("assets/LoiraSprites/Loira_parada_D.png"));
+                jumping = new TextureRegion(new Texture("assets/LoiraSprites/Loira_pulo.png"));
+                break;
+            case 3:
+                idle = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Parado.png"));
+                jumping = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Pulando_D.png"));
                 break;
             default:
                 System.out.println("Não setou a skin!!!");
@@ -260,5 +330,9 @@ public class Character {
             return 0;
         }
         return this.health;
+    }
+
+    public TextureRegion getIdle() {
+        return this.idle;
     }
 }
