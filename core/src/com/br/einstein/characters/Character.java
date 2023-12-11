@@ -1,9 +1,10 @@
 package com.br.einstein.characters;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.br.einstein.MyGdxGame;
+import com.br.einstein.screen.GameScreen;
 import com.br.einstein.screen.ScreenManager;
 
 public class Character {
@@ -47,75 +48,78 @@ public class Character {
     }
 
     public void update() {
-        elapsedTime = ((float)(System.currentTimeMillis() - startTime))/1000;
-        if (jump == 1) {
-            if (!Gdx.input.isKeyJustPressed(space)) {
-                velocity.y -= 9.8f * 35;
-            } else if (Gdx.input.isKeyJustPressed(space)) {
-                if (velocity.y <= 0) {
-                    velocity.y = 1;
+        if (!GameScreen.isPauseStatus()){
+            elapsedTime = ((float) (System.currentTimeMillis() - startTime)) / 1000;
+            if (jump == 1) {
+                if (!Gdx.input.isKeyJustPressed(space)) {
+                    velocity.y -= 9.8f * 35;
+                } else if (Gdx.input.isKeyJustPressed(space)) {
+                    if (velocity.y <= 0) {
+                        velocity.y = 1;
+                    }
+                    velocity.y += 9.8f * 35;
+                    y += velocity.y * Gdx.graphics.getDeltaTime();
+                    jump++;
                 }
-                velocity.y += 9.8f * 35;
+            } else {
+                if (!Gdx.input.isKeyJustPressed(space)) {
+                    velocity.y -= 9.8f;
+                }
+                if (y <= 25) {
+                    jump = 1;
+                }
+            }
+            //walkRight
+            if (Gdx.input.isKeyPressed(right)) {
+                if (x < Gdx.graphics.getWidth() - 350 && ScreenManager.isFullScreenStatus()) {
+                    before = x;
+                    x += 250 * Gdx.graphics.getDeltaTime();
+                } else if (x < Gdx.graphics.getWidth() + 350 && !ScreenManager.isFullScreenStatus()) {
+                    before = x;
+                    x += 250 * Gdx.graphics.getDeltaTime();
+                }
+            }
+            // dashRight
+            if (Gdx.input.isKeyJustPressed(right)) {
+                if ((elapsedTime - lastTimeRight) < 0.25f && elapsedTime - lastTimeDash > 0.75f) {
+                    x += 10000 * Gdx.graphics.getDeltaTime();
+                    lastTimeDash = elapsedTime;
+                    if (x >= Gdx.graphics.getWidth() - 350 && ScreenManager.isFullScreenStatus()) {
+                        x = Gdx.graphics.getWidth() - 350;
+                    } else if (x >= Gdx.graphics.getWidth() && !ScreenManager.isFullScreenStatus()) {
+                        x = Gdx.graphics.getWidth() + 350;
+                    }
+                }
+                lastTimeRight = elapsedTime;
+            }
+            // walkLeft
+            if (Gdx.input.isKeyPressed(left)) {
+                if (x > -135 && ScreenManager.isFullScreenStatus()) {
+                    before = x;
+                    x -= 250 * Gdx.graphics.getDeltaTime();
+                } else if (x > -150 && !ScreenManager.isFullScreenStatus()) {
+                    before = x;
+                    x -= 250 * Gdx.graphics.getDeltaTime();
+                }
+            }
+            // dashLeft
+            if (Gdx.input.isKeyJustPressed(left)) {
+                if ((elapsedTime - lastTimeLeft) < 0.25f && elapsedTime - lastTimeDash > 0.75f) {
+                    x -= 10000 * Gdx.graphics.getDeltaTime();
+                    lastTimeDash = elapsedTime;
+                    if (x <= -150 && !ScreenManager.isFullScreenStatus()) {
+                        x = -150;
+                    } else if (x <= -135 && ScreenManager.isFullScreenStatus()) {
+                        x = -135;
+                    }
+                }
+                lastTimeLeft = elapsedTime;
+            }
+            if (y >= 25) {
                 y += velocity.y * Gdx.graphics.getDeltaTime();
-                jump++;
-            }
-        } else {
-            if (!Gdx.input.isKeyJustPressed(space)) {
-                velocity.y -= 9.8f;
-            }
-            if (y <= 25) {
-                jump = 1;
             }
         }
-        //walkRight
-        if (Gdx.input.isKeyPressed(right)) {
-            if (x < Gdx.graphics.getWidth() - 350 && ScreenManager.isFullScreenStatus()) {
-                before = x;
-                x += 250 * Gdx.graphics.getDeltaTime();
-            } else if(x < Gdx.graphics.getWidth() + 350 && !ScreenManager.isFullScreenStatus()) {
-                before = x;
-                x+= 250 * Gdx.graphics.getDeltaTime();
-            }
-        }
-        // dashRight
-        if (Gdx.input.isKeyJustPressed(right)){
-            if((elapsedTime-lastTimeRight) < 0.25f && elapsedTime-lastTimeDash > 0.75f){
-                x += 10000 * Gdx.graphics.getDeltaTime();
-                lastTimeDash=elapsedTime;
-                if (x >= Gdx.graphics.getWidth() - 350 && ScreenManager.isFullScreenStatus()) {
-                    x = Gdx.graphics.getWidth() - 350;
-                } else if (x >= Gdx.graphics.getWidth() && !ScreenManager.isFullScreenStatus()) {
-                    x = Gdx.graphics.getWidth() + 350;
-                }
-            }
-            lastTimeRight=elapsedTime;
-        }
-        // walkLeft
-        if (Gdx.input.isKeyPressed(left)) {
-            if (x > -135 && ScreenManager.isFullScreenStatus()) {
-                before = x;
-                x -= 250 * Gdx.graphics.getDeltaTime();
-            } else if (x > -150 && !ScreenManager.isFullScreenStatus()) {
-                before = x;
-                x -= 250 * Gdx.graphics.getDeltaTime();
-            }
-        }
-        // dashLeft
-        if (Gdx.input.isKeyJustPressed(left)){
-            if((elapsedTime-lastTimeLeft) < 0.25f && elapsedTime-lastTimeDash > 0.75f){
-                x -= 10000 * Gdx.graphics.getDeltaTime();
-                lastTimeDash=elapsedTime;
-                if (x <= -150 && !ScreenManager.isFullScreenStatus()) {
-                    x = -150;
-                } else if (x <= -135 && ScreenManager.isFullScreenStatus()) {
-                    x = -135;
-                }
-            }
-            lastTimeLeft=elapsedTime;
-        }
-        if (y >= 25) {
-            y += velocity.y * Gdx.graphics.getDeltaTime();
-        }
+
     }
 
     public Texture getImage() {

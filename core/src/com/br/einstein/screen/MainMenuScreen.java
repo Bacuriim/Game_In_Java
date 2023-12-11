@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.br.einstein.MyGdxGame;
 import com.br.einstein.mechanics.FontParameters;
 
 public class MainMenuScreen implements Screen {

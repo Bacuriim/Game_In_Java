@@ -1,6 +1,7 @@
 package com.br.einstein.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -25,10 +26,8 @@ public class GameScreen implements Screen {
     Texture redGradient;
     Texture lightBrownGradient;
     Texture darkBrownGradient;
-    public SpriteBatch batch;
-    public Texture imgE;
-    public Texture imgD;
-    public Texture imgB;
+    Texture blackTransparent;
+    static boolean pauseStatus=false;
 
     private Character character1 = new Character(700, 25, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N,1);
 
@@ -45,6 +44,7 @@ public class GameScreen implements Screen {
         redGradient = new Texture("redgradient.jpg");
         lightBrownGradient = new Texture ("lightbrowngradient.png");
         darkBrownGradient = new Texture("darkbrowngradient.png");
+        blackTransparent = new Texture ("A_black_image.png");
 
     }
 
@@ -74,6 +74,8 @@ public class GameScreen implements Screen {
     public Texture getDarkBrownGradient(){
         return darkBrownGradient;
     }
+    public Texture getBlackTransparent(){return blackTransparent;}
+
 
     @Override
     public void show() {
@@ -123,6 +125,15 @@ public class GameScreen implements Screen {
         batch.begin();
         batch.draw(getRedGradient(), ((float) ScreenManager.V_WIDTH*0.9f), (((float) ScreenManager.V_HEIGTH*0.945f)), -700 * character2.getHealth()/100, 50);
         batch.end();
+
+        if (pauseStatus){
+            batch.begin();
+            batch.draw(getBlackTransparent(), 0, 0, ((float) ScreenManager.V_WIDTH), ((float) ScreenManager.V_HEIGTH));
+            batch.end();
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            GameScreen.switchPause();
+        }
     }
 
     @Override
@@ -145,6 +156,18 @@ public class GameScreen implements Screen {
 
     }
 
+    public static boolean isPauseStatus() {
+        return pauseStatus;
+    }
+
+    public static void switchPause(){
+        if(pauseStatus){
+            pauseStatus=false;
+        }
+        else if (!pauseStatus){
+            pauseStatus=true;
+        }
+    }
     @Override
     public void dispose() {
         batch.dispose();
