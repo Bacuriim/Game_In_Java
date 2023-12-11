@@ -41,7 +41,7 @@ public class MainMenuScreen implements Screen {
         this.game = game;
         gameCam = new OrthographicCamera();
         viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH, gameCam);
-        texture = new Texture("1_empxo5xvgaefru0-13999131.png");
+        texture = new Texture("assets/backgrounds/mainMenuImage.png");
 
 
         //Setting stage
@@ -51,7 +51,7 @@ public class MainMenuScreen implements Screen {
         //Creating labels
         logo = new Label("Street Fortal", fontParameters.getLabelStyle100());
         logo.setSize(100, 100);
-        logo.setPosition(ScreenManager.V_WIDTH / 2f - 350, ScreenManager.V_HEIGTH / 2f + 300);
+        logo.setPosition(ScreenManager.V_WIDTH / 2f - 125, ScreenManager.V_HEIGTH / 2f + 300, Align.center);
         menuStage.addActor(logo);
 
         madeBy = new Label("Made by\n     CCR", fontParameters.getLabelStyle50());
@@ -131,6 +131,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         menuStage.dispose();
+        fontParameters.dispose();
     }
     public void loadSelection() {
         hide();

@@ -3,10 +3,9 @@ package com.br.einstein.screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.br.einstein.characters.Character;
 
 public class ScreenManager extends Game {
     public static final int V_WIDTH = 1920;
@@ -19,7 +18,6 @@ public class ScreenManager extends Game {
     public static boolean isFullScreenStatus() {
         return fullScreenStatus;
     }
-
 
 
     @Override

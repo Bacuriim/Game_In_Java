@@ -11,8 +11,8 @@ public class DesktopLauncher {
 		config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		config.useVsync(true);
 		config.setResizable(false);
-		config.setForegroundFPS(75);
-		config.setTitle("Game");
+		config.setForegroundFPS(60);
+		config.setTitle("StreetFortal");
 		config.setWindowIcon("icon.png");
 		new Lwjgl3Application(new ScreenManager(), config);
 	}
