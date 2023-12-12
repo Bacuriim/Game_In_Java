@@ -2,6 +2,7 @@ package com.br.einstein.characters;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -54,6 +55,8 @@ public class Character {
     private TextureRegion imunity;
     public Rectangle damageHitBox = new Rectangle();
     public Rectangle movementHitBox = new Rectangle();
+    Sound Punch = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Punch.mp3"));
+    Sound Kick = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Kick.mp3"));
 
     public Character(float x, float y, int left, int right, int space, int punch, int kick, int block, int characterId) {
         this.x = x;
@@ -66,7 +69,7 @@ public class Character {
         this.kick = kick;
         this.block = block;
         this.characterId = characterId;
-        velocity = new Vector2(0, -1); // Define a velocidade inicial como -1 na direção Y (gravidade para baixo).
+        velocity = new Vector2(0, -1); // Define a velocidade inicial como -1 na direção Y (gravidade para baixo)
 
         if (characterId == 1) {
             punchImage = new Texture("assets/IracemaSprites/Iracema_soco_animation_D.png");
@@ -285,12 +288,14 @@ public class Character {
 
         if (isPunching) {
             if (stateTime >= punchAnimation.getAnimationDuration()) {
+                Punch.play(1.0f);
                 isPunching = false;
             } else {
                 return currentPunchFrame;
             }
         } else if (isKicking) {
             if (stateTime >= kickAnimation.getAnimationDuration()) {
+                Kick.play(1.0f);
                 isKicking = false;
             } else {
                 return currentKickFrame;
