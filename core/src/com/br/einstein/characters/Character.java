@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.br.einstein.screen.GameScreen;
 import com.br.einstein.screen.ScreenManager;
 
@@ -28,6 +29,8 @@ public class Character {
     private float lastTimeDash;
     private int jump = 1;
     private final int characterId;
+    private static int wins = 0;
+    private static int wins2 = 0;
 
     //
     private Texture punchImage;
@@ -286,6 +289,7 @@ public class Character {
             setSkin();
         }
 
+
         stateTime = 0;
         return idle;
     }
@@ -331,8 +335,32 @@ public class Character {
         }
         return this.health;
     }
+    public void setHealth(float health) {
+        this.health = health;
+    }
 
     public TextureRegion getIdle() {
         return this.idle;
+    }
+
+    public int getWins() {
+        return this.wins;
+    }
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getWins2() {
+        return this.wins2;
+    }
+    public void setWins2(int wins2) {
+        this.wins2 = wins2;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+    public void setY(int y) {
+        this.y = y;
     }
 }
