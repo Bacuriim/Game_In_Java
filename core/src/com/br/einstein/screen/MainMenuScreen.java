@@ -72,7 +72,7 @@ public class MainMenuScreen implements Screen {
 
         menuMusic.play();
         menuMusic.setLooping(true);
-        menuMusic.setVolume(0.5f);
+        menuMusic.setVolume(0.2f);
 
 
         button.addListener(new ChangeListener() {

@@ -58,7 +58,7 @@ public class SelectionScreen implements Screen {
 
         selectionMusic.play();
         selectionMusic.setLooping(true);
-        selectionMusic.setVolume(0.5f);
+        selectionMusic.setVolume(0.2f);
 
         returnButton = new TextButton("Voltar", fontParameters.getButtonStyle());
         returnButton.setPosition(30, 30);
@@ -112,7 +112,7 @@ public class SelectionScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 System.out.println("iracema selected");
-                Selection.play(1.0f);
+                Selection.play(2.0f);
                 if (selected == 0) {
                     char1 = 1;
                 } else if (selected == 1) {
@@ -126,7 +126,7 @@ public class SelectionScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 System.out.println("loira selected");
-                Selection.play(1.0f);
+                Selection.play(2.0f);
                 if (selected == 0) {
                     char1 = 2;
                 } else if (selected == 1) {
@@ -140,7 +140,7 @@ public class SelectionScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 System.out.println("sarto selected");
-                Selection.play(1.0f);
+                Selection.play(2.0f);
                 if (selected == 0) {
                     char1 = 3;
                 } else if (selected == 1) {

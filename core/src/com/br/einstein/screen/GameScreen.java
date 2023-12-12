@@ -66,7 +66,10 @@ public class GameScreen implements Screen {
 
     private Character character2;
     private Label p1;
-    private Label p2;    Sound Fight = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Fight.mp3"));
+    private Label p2;
+    Sound Round1 = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Round 1.mp3"));
+    Sound Round2 = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Round 2.mp3"));
+    Sound FinalRound = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Final Round.mp3"));
     Sound Selection = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Selection.mp3"));
     public GameScreen(ScreenManager game, String arena, int char1, int char2, int round) {
         this.game = game;
@@ -95,7 +98,7 @@ public class GameScreen implements Screen {
 
         fightMusic.play();
         fightMusic.setLooping(true);
-        fightMusic.setVolume(0.5f);
+        fightMusic.setVolume(0.2f);
 
         menuButton = new TextButton("Menu", fontParameters.getButtonStyle());
         menuButton.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH / 2f, Align.center);
@@ -111,14 +114,24 @@ public class GameScreen implements Screen {
         roundLabel.setAlignment(Align.center);
         stage = new Stage(viewport);
         stage.addActor(roundLabel);
-        Fight.play(0.8f);
+        switch(round){
+            case 1:
+                Round1.play(0.8f);
+                break;
+            case 2:
+                Round2.play(0.8f);
+                break;
+            case 3:
+                FinalRound.play(0.8f);
+                break;
+        }
         Gdx.input.setInputProcessor(stage);
 
 
         menuButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Selection.play(1.0f);
+                Selection.play(2.0f);
                 hide();
                 returnMenu();
             }
