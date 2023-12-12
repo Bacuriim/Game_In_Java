@@ -55,6 +55,7 @@ public class GameScreen implements Screen {
 
     private Character character2;
     Sound Fight = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Fight.mp3"));
+    Sound Selection = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Selection.mp3"));
 
     public GameScreen(ScreenManager game, String arena, int char1, int char2) {
         this.game = game;
@@ -94,6 +95,7 @@ public class GameScreen implements Screen {
         menuButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Selection.play(1.0f);
                 hide();
                 returnMenu();
             }
@@ -109,6 +111,7 @@ public class GameScreen implements Screen {
         resumeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Selection.play(1.0f);
                 isGameRunning = !isGameRunning;
             }
         });

@@ -279,15 +279,15 @@ public class Character {
 
         if (isPunching) {
             if (stateTime >= punchAnimation.getAnimationDuration()) {
-                isPunching = false;
                 Punch.play(1.0f);
+                isPunching = false;
             } else {
                 return currentPunchFrame;
             }
         } else if (isKicking) {
             if (stateTime >= kickAnimation.getAnimationDuration()) {
-                isKicking = false;
                 Kick.play(1.0f);
+                isKicking = false;
             } else {
                 return currentKickFrame;
             }
