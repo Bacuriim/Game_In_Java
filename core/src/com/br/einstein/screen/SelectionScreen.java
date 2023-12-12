@@ -4,6 +4,7 @@ package com.br.einstein.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -43,6 +44,7 @@ public class SelectionScreen implements Screen {
     private int selected = 0;
     private String arena;
     private String t = "icon.png";
+    Sound Selection = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Selection.mp3"));
 
 
 
@@ -106,6 +108,7 @@ public class SelectionScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 System.out.println("iracema selected");
+                Selection.play(1.0f);
                 if (selected == 0) {
                     char1 = 1;
                 } else if (selected == 1) {
@@ -119,6 +122,7 @@ public class SelectionScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 System.out.println("loira selected");
+                Selection.play(1.0f);
                 if (selected == 0) {
                     char1 = 2;
                 } else if (selected == 1) {
@@ -132,6 +136,7 @@ public class SelectionScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 System.out.println("sarto selected");
+                Selection.play(1.0f);
                 if (selected == 0) {
                     char1 = 3;
                 } else if (selected == 1) {
@@ -226,12 +231,14 @@ public class SelectionScreen implements Screen {
             }
 
             if (castelaoButton.isPressed()) {
+                Selection.play(1.0f);
                 arena = "assets/backgrounds/gameBackgrounds/castelao.png";
                 t = "assets/backgrounds/gameBackgrounds/castelao.png";
                 selected++;
             }
 
             if (estacionamentoButton.isPressed()) {
+                Selection.play(1.0f);
                 arena = "assets/backgrounds/gameBackgrounds/estacionamento.png";
                 t = "assets/backgrounds/gameBackgrounds/estacionamento.png";
                 selected++;

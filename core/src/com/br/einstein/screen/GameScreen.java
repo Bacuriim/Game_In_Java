@@ -3,6 +3,7 @@ package com.br.einstein.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -53,6 +54,7 @@ public class GameScreen implements Screen {
     private Character character1;
 
     private Character character2;
+    Sound Fight = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Fight.mp3"));
 
     public GameScreen(ScreenManager game, String arena, int char1, int char2) {
         this.game = game;
@@ -85,6 +87,7 @@ public class GameScreen implements Screen {
         roundLabel.setAlignment(Align.center);
         stage = new Stage(viewport);
         stage.addActor(roundLabel);
+        Fight.play(0.8f);
         Gdx.input.setInputProcessor(stage);
 
 
