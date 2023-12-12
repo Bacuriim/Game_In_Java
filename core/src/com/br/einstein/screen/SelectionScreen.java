@@ -4,6 +4,7 @@ package com.br.einstein.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -37,6 +38,7 @@ public class SelectionScreen implements Screen {
     private ImageButton loiraChar;
     private ImageButton sartoChar;
     private Button lutar;
+    private Music selectionMusic = Gdx.audio.newMusic(Gdx.files.internal("assets/musics/Selection_Screen.mp3"));
 
     private int char1;
     private int char2;
@@ -52,7 +54,9 @@ public class SelectionScreen implements Screen {
         viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH, gameCam);
         stage = new Stage(viewport);
 
-
+        selectionMusic.play();
+        selectionMusic.setLooping(true);
+        selectionMusic.setVolume(0.5f);
 
         returnButton = new TextButton("Voltar", fontParameters.getButtonStyle());
         returnButton.setPosition(30, 30);
@@ -272,11 +276,13 @@ public class SelectionScreen implements Screen {
 
     public void returnScreen() {
         hide();
+        selectionMusic.stop();
         game.setScreen(new MainMenuScreen(game));
     }
 
     public void loadGame() {
         hide();
-        game.setScreen(new GameScreen(game, arena, char1, char2));
+        selectionMusic.stop();
+        game.setScreen(new GameScreen(game, arena, char1, char2, 1));
     }
 }
