@@ -6,10 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -44,6 +41,7 @@ public class GameScreen implements Screen {
     Texture redGradient;
     Texture lightBrownGradient;
     Texture darkBrownGradient;
+    private boolean hit;
 
     private int char1;
     private int char2;
@@ -59,8 +57,8 @@ public class GameScreen implements Screen {
         gameCam = new OrthographicCamera();
         viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH, gameCam);
 
-        character1 = new Character(-180, 26, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N,char1);
-        character2 = new Character(1600, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.NUM_2, Input.Keys.NUM_3, char2);
+        character1 = new Character(-180, 26, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N, Input.Keys.M, char1);
+        character2 = new Character(1600, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.NUM_1, Input.Keys.NUMPAD_2, Input.Keys.NUMPAD_3, char2);
         character1.setSkin();
         character2.setSkin();
         imgB = new Texture(arena);
@@ -133,10 +131,7 @@ public class GameScreen implements Screen {
         game.batch.begin();
         ScreenUtils.clear(189/255f, 195/255f, 199/255f, 1);
         game.batch.end();
-        System.out.println(character1.getBeforeX());
-        System.out.println(character1.getBeforeY());
-        System.out.println(character2.getBeforeX());
-        System.out.println(character2.getBeforeY());
+
         if (character1.movementHitBox.overlaps(character2.movementHitBox)) {
             if(shouldFlip) {
                 character1.setX(character1.getBeforeX() + 20);
@@ -147,12 +142,14 @@ public class GameScreen implements Screen {
             }
         }
 
-        if(character1.damageHitBox.overlaps(character2.damageHitBox) && (character1.isKicking || character1.isPunching)) {
+        if(character1.damageHitBox.overlaps(character2.damageHitBox) && (character1.isKicking || character1.isPunching) && !character2.isBlocking) {
             character2.setHealth(character2.getHealth() - 00.25f);
+            character2.isHit = true;
         }
 
-        if(character2.damageHitBox.overlaps(character1.damageHitBox) && (character2.isKicking || character2.isPunching)) {
+        if(character2.damageHitBox.overlaps(character1.damageHitBox) && (character2.isKicking || character2.isPunching) && !character1.isBlocking) {
             character1.setHealth(character1.getHealth() - 00.25f);
+            character1.isHit = true;
         }
 
 

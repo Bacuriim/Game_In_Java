@@ -23,6 +23,7 @@ public class Character {
     protected int space;
     protected int punch;
     protected int kick;
+    protected int block;
     private final long startTime = System.currentTimeMillis();
     private float elapsedTime;
     private float lastTimeRight;
@@ -39,15 +40,19 @@ public class Character {
     private float stateTime;
     public boolean isPunching = false;
     public boolean isKicking = false;
+    public boolean isBlocking = false;
+    public boolean isHit = false;
     private TextureRegion currentPunchFrame;
     private TextureRegion currentWalkFrame;
     private TextureRegion currentKickFrame;
+    private TextureRegion blocking;
     private TextureRegion idle;
     private TextureRegion jumping;
+    private TextureRegion imunity;
     public Rectangle damageHitBox = new Rectangle();
     public Rectangle movementHitBox = new Rectangle();
 
-    public Character(float x, float y, int left, int right, int space, int punch, int kick, int characterId) {
+    public Character(float x, float y, int left, int right, int space, int punch, int kick, int block, int characterId) {
         this.x = x;
         this.y = y;
         this.left = left;
@@ -56,6 +61,7 @@ public class Character {
         this.health = 100.0f;
         this.punch = punch;
         this.kick = kick;
+        this.block = block;
         this.characterId = characterId;
         velocity = new Vector2(0, -1); // Define a velocidade inicial como -1 na direção Y (gravidade para baixo).
 
@@ -186,7 +192,7 @@ public class Character {
     public void update() {
         elapsedTime = ((float)(System.currentTimeMillis() - startTime))/1000;
 
-        if (jump == 1) {
+        if (jump == 1 && !isBlocking) {
             if (!Gdx.input.isKeyJustPressed(space)) {
                 velocity.y -= 9.8f * 70;
             } else if (Gdx.input.isKeyJustPressed(space)) {
@@ -206,7 +212,7 @@ public class Character {
             }
         }
         //walkRight
-        if (Gdx.input.isKeyPressed(right) && (!isPunching && !isKicking)) {
+        if (Gdx.input.isKeyPressed(right) && (!isPunching && !isKicking && !isBlocking)) {
             if (x < Gdx.graphics.getWidth() - 350 && ScreenManager.isFullScreenStatus()) {
                 beforeX = x;
                 x += 250 * Gdx.graphics.getDeltaTime();
@@ -216,7 +222,7 @@ public class Character {
             }
         }
         // dashRight
-        if (Gdx.input.isKeyJustPressed(right) && (!isPunching && !isKicking)){
+        if (Gdx.input.isKeyJustPressed(right) && (!isPunching && !isKicking && !isBlocking)){
             if((elapsedTime-lastTimeRight) < 0.25f && elapsedTime-lastTimeDash > 0.75f){
                 x += 10000 * Gdx.graphics.getDeltaTime();
                 lastTimeDash=elapsedTime;
@@ -229,7 +235,7 @@ public class Character {
             lastTimeRight=elapsedTime;
         }
         // walkLeft
-        if (Gdx.input.isKeyPressed(left) && (!isPunching && !isKicking)) {
+        if (Gdx.input.isKeyPressed(left) && (!isPunching && !isKicking && !isBlocking)) {
             if (x > -135 && ScreenManager.isFullScreenStatus()) {
                 beforeX = x;
                 x -= 250 * Gdx.graphics.getDeltaTime();
@@ -239,7 +245,7 @@ public class Character {
             }
         }
         // dashLeft
-        if (Gdx.input.isKeyJustPressed(left) && (!isPunching && !isKicking)){
+        if (Gdx.input.isKeyJustPressed(left) && (!isPunching && !isKicking && !isBlocking)){
             if((elapsedTime-lastTimeLeft) < 0.25f && elapsedTime-lastTimeDash > 0.75f){
                 x -= 10000 * Gdx.graphics.getDeltaTime();
                 lastTimeDash=elapsedTime;
@@ -286,17 +292,28 @@ public class Character {
             } else {
                 return currentKickFrame;
             }
+        } else if (isBlocking && (y < 27)) {
+            if(stateTime >= walkAnimation.getAnimationDuration()) {
+                isBlocking = false;
+            } else {
+                return blocking;
+            }
         }
 
         if (Gdx.input.isKeyJustPressed(punch)) {
             isPunching = true;
         } else if (Gdx.input.isKeyJustPressed(kick)) {
             isKicking = true;
-        } else if ((Gdx.input.isKeyPressed(left) || Gdx.input.isKeyPressed(right)) && y < 27) {
+        } else if (Gdx.input.isKeyPressed(block) && y < 27) {
+            isBlocking = true;
+        }else if ((Gdx.input.isKeyPressed(left) || Gdx.input.isKeyPressed(right)) && y < 27) {
             return currentWalkFrame;
         }
 
-        if (y >= 27) {
+        if(isHit) {
+            idle = imunity;
+            isHit = false;
+        } else if (y >= 27){
             idle = jumping;
         } else {
             setSkin();
@@ -313,14 +330,20 @@ public class Character {
             case 1:
                 idle = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_parada_D.png"));
                 jumping = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_pulo.png"));
+                blocking = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_Block.png"));
+                imunity = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_Dano.png"));
                 break;
             case 2:
                 idle = new TextureRegion(new Texture("assets/LoiraSprites/Loira_parada_D.png"));
                 jumping = new TextureRegion(new Texture("assets/LoiraSprites/Loira_pulo.png"));
+                blocking = new TextureRegion(new Texture("assets/LoiraSprites/Loira_Block.png"));
+                imunity = new TextureRegion(new Texture("assets/LoiraSprites/Loira_Dano.png"));
                 break;
             case 3:
                 idle = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Parado.png"));
                 jumping = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Pulando_D.png"));
+                blocking = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Block.png"));
+                imunity = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Dano.png"));
                 break;
             default:
                 System.out.println("Não setou a skin!!!");
