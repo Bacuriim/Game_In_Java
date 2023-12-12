@@ -62,7 +62,7 @@ public class GameScreen implements Screen {
         viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH, gameCam);
 
         character1 = new Character(-180, 26, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N,char1);
-        character2 = new Character(1600, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.NUMPAD_2, Input.Keys.NUMPAD_3, char2);
+        character2 = new Character(1600, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.NUM_2, Input.Keys.NUM_3, char2);
         character1.setSkin();
         character2.setSkin();
         imgB = new Texture(arena);
@@ -109,6 +109,7 @@ public class GameScreen implements Screen {
                 isGameRunning = !isGameRunning;
             }
         });
+
     }
 
     public Texture getRedGradient(){
@@ -134,6 +135,27 @@ public class GameScreen implements Screen {
         game.batch.begin();
         ScreenUtils.clear(189/255f, 195/255f, 199/255f, 1);
         game.batch.end();
+        System.out.println(character1.getBeforeX());
+        System.out.println(character1.getBeforeY());
+        System.out.println(character2.getBeforeX());
+        System.out.println(character2.getBeforeY());
+        if (character1.movementHitBox.overlaps(character2.movementHitBox)) {
+            if(shouldFlip) {
+                character1.setX(character1.getBeforeX() + 20);
+                character2.setX(character2.getBeforeX() - 20);
+            } else {
+                character1.setX(character1.getBeforeX() - 20);
+                character2.setX(character2.getBeforeX() + 20);
+            }
+        }
+
+        if(character1.damageHitBox.overlaps(character2.damageHitBox) && (character1.isKicking || character1.isPunching)) {
+            character2.setHealth(character2.getHealth() - 00.25f);
+        }
+
+        if(character2.damageHitBox.overlaps(character1.damageHitBox) && (character2.isKicking || character2.isPunching)) {
+            character1.setHealth(character1.getHealth() - 00.25f);
+        }
 
 
         if (roundTime > 2 && isGameRunning) {
