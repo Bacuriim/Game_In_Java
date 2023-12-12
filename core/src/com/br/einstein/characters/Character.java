@@ -52,6 +52,7 @@ public class Character {
     private TextureRegion idle;
     private TextureRegion jumping;
     private TextureRegion imunity;
+    private TextureRegion dead;
     public Rectangle damageHitBox = new Rectangle();
     public Rectangle movementHitBox = new Rectangle();
 
@@ -272,6 +273,10 @@ public class Character {
         currentKickFrame = kickAnimation.getKeyFrame(stateTime,false);
         stateTime += Gdx.graphics.getDeltaTime();
 
+        if (health == 0) {
+            return dead;
+        }
+
         if (characterId == 1){
             movementHitBox.set(getX(), getY(), 170, 360);
             damageHitBox.set(getX(), getY(), 220, 360);
@@ -336,18 +341,21 @@ public class Character {
                 jumping = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_pulo.png"));
                 blocking = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_Block.png"));
                 imunity = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_Dano.png"));
+                dead = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_Morta.png"));
                 break;
             case 2:
                 idle = new TextureRegion(new Texture("assets/LoiraSprites/Loira_parada_D.png"));
                 jumping = new TextureRegion(new Texture("assets/LoiraSprites/Loira_pulo.png"));
                 blocking = new TextureRegion(new Texture("assets/LoiraSprites/Loira_Block.png"));
                 imunity = new TextureRegion(new Texture("assets/LoiraSprites/Loira_Dano.png"));
+                dead = new TextureRegion(new Texture("assets/LoiraSprites/Loira_Morta.png"));
                 break;
             case 3:
                 idle = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Parado.png"));
                 jumping = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Pulando_D.png"));
                 blocking = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Block.png"));
                 imunity = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Dano.png"));
+                dead = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Morto.png"));
                 break;
             default:
                 System.out.println("Não setou a skin!!!");
