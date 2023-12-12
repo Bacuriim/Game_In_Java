@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.br.einstein.screen.GameScreen;
 import com.br.einstein.screen.ScreenManager;
 
@@ -24,6 +25,7 @@ public class Character {
     protected int space;
     protected int punch;
     protected int kick;
+    protected int block;
     private final long startTime = System.currentTimeMillis();
     private float elapsedTime;
     private float lastTimeRight;
@@ -31,6 +33,8 @@ public class Character {
     private float lastTimeDash;
     private int jump = 1;
     private final int characterId;
+    private static int wins = 0;
+    private static int wins2 = 0;
     private Texture punchImage;
     private Texture kickImage;
     private Texture walkImage;
@@ -40,17 +44,21 @@ public class Character {
     private float stateTime;
     public boolean isPunching = false;
     public boolean isKicking = false;
+    public boolean isBlocking = false;
+    public boolean isHit = false;
     private TextureRegion currentPunchFrame;
     private TextureRegion currentWalkFrame;
     private TextureRegion currentKickFrame;
+    private TextureRegion blocking;
     private TextureRegion idle;
     private TextureRegion jumping;
+    private TextureRegion imunity;
     public Rectangle damageHitBox = new Rectangle();
     public Rectangle movementHitBox = new Rectangle();
     Sound Punch = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Punch.mp3"));
     Sound Kick = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Kick.mp3"));
 
-    public Character(float x, float y, int left, int right, int space, int punch, int kick, int characterId) {
+    public Character(float x, float y, int left, int right, int space, int punch, int kick, int block, int characterId) {
         this.x = x;
         this.y = y;
         this.left = left;
@@ -59,6 +67,7 @@ public class Character {
         this.health = 100.0f;
         this.punch = punch;
         this.kick = kick;
+        this.block = block;
         this.characterId = characterId;
         velocity = new Vector2(0, -1); // Define a velocidade inicial como -1 na direção Y (gravidade para baixo)
 
@@ -189,7 +198,7 @@ public class Character {
     public void update() {
         elapsedTime = ((float)(System.currentTimeMillis() - startTime))/1000;
 
-        if (jump == 1) {
+        if (jump == 1 && !isBlocking) {
             if (!Gdx.input.isKeyJustPressed(space)) {
                 velocity.y -= 9.8f * 70;
             } else if (Gdx.input.isKeyJustPressed(space)) {
@@ -209,7 +218,7 @@ public class Character {
             }
         }
         //walkRight
-        if (Gdx.input.isKeyPressed(right) && (!isPunching && !isKicking)) {
+        if (Gdx.input.isKeyPressed(right) && (!isPunching && !isKicking && !isBlocking)) {
             if (x < Gdx.graphics.getWidth() - 350 && ScreenManager.isFullScreenStatus()) {
                 beforeX = x;
                 x += 250 * Gdx.graphics.getDeltaTime();
@@ -219,7 +228,7 @@ public class Character {
             }
         }
         // dashRight
-        if (Gdx.input.isKeyJustPressed(right) && (!isPunching && !isKicking)){
+        if (Gdx.input.isKeyJustPressed(right) && (!isPunching && !isKicking && !isBlocking)){
             if((elapsedTime-lastTimeRight) < 0.25f && elapsedTime-lastTimeDash > 0.75f){
                 x += 10000 * Gdx.graphics.getDeltaTime();
                 lastTimeDash=elapsedTime;
@@ -232,7 +241,7 @@ public class Character {
             lastTimeRight=elapsedTime;
         }
         // walkLeft
-        if (Gdx.input.isKeyPressed(left) && (!isPunching && !isKicking)) {
+        if (Gdx.input.isKeyPressed(left) && (!isPunching && !isKicking && !isBlocking)) {
             if (x > -135 && ScreenManager.isFullScreenStatus()) {
                 beforeX = x;
                 x -= 250 * Gdx.graphics.getDeltaTime();
@@ -242,7 +251,7 @@ public class Character {
             }
         }
         // dashLeft
-        if (Gdx.input.isKeyJustPressed(left) && (!isPunching && !isKicking)){
+        if (Gdx.input.isKeyJustPressed(left) && (!isPunching && !isKicking && !isBlocking)){
             if((elapsedTime-lastTimeLeft) < 0.25f && elapsedTime-lastTimeDash > 0.75f){
                 x -= 10000 * Gdx.graphics.getDeltaTime();
                 lastTimeDash=elapsedTime;
@@ -268,13 +277,13 @@ public class Character {
 
         if (characterId == 1){
             movementHitBox.set(getX(), getY(), 170, 360);
-            damageHitBox.set(getX(), getY(), 200, 360);
+            damageHitBox.set(getX(), getY(), 220, 360);
         } else if (characterId == 2){
             movementHitBox.set(getX(), getY(), 150, 390);
-            damageHitBox.set(getX(), getY(), 180, 390);
+            damageHitBox.set(getX(), getY(), 200, 390);
         } else if (characterId == 3){
             movementHitBox.set(getX(), getY(), 170, 440);
-            damageHitBox.set(getX(), getY(), 200, 440);
+            damageHitBox.set(getX(), getY(), 220, 440);
         }
 
         if (isPunching) {
@@ -291,21 +300,33 @@ public class Character {
             } else {
                 return currentKickFrame;
             }
+        } else if (isBlocking && (y < 27)) {
+            if(stateTime >= walkAnimation.getAnimationDuration()) {
+                isBlocking = false;
+            } else {
+                return blocking;
+            }
         }
 
         if (Gdx.input.isKeyJustPressed(punch)) {
             isPunching = true;
         } else if (Gdx.input.isKeyJustPressed(kick)) {
             isKicking = true;
-        } else if ((Gdx.input.isKeyPressed(left) || Gdx.input.isKeyPressed(right)) && y < 27) {
+        } else if (Gdx.input.isKeyPressed(block) && y < 27) {
+            isBlocking = true;
+        }else if ((Gdx.input.isKeyPressed(left) || Gdx.input.isKeyPressed(right)) && y < 27) {
             return currentWalkFrame;
         }
 
-        if (y >= 27) {
+        if(isHit) {
+            idle = imunity;
+            isHit = false;
+        } else if (y >= 27){
             idle = jumping;
         } else {
             setSkin();
         }
+
 
         stateTime = 0;
         return idle;
@@ -318,14 +339,20 @@ public class Character {
             case 1:
                 idle = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_parada_D.png"));
                 jumping = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_pulo.png"));
+                blocking = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_Block.png"));
+                imunity = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_Dano.png"));
                 break;
             case 2:
                 idle = new TextureRegion(new Texture("assets/LoiraSprites/Loira_parada_D.png"));
                 jumping = new TextureRegion(new Texture("assets/LoiraSprites/Loira_pulo.png"));
+                blocking = new TextureRegion(new Texture("assets/LoiraSprites/Loira_Block.png"));
+                imunity = new TextureRegion(new Texture("assets/LoiraSprites/Loira_Dano.png"));
                 break;
             case 3:
                 idle = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Parado.png"));
                 jumping = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Pulando_D.png"));
+                blocking = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Block.png"));
+                imunity = new TextureRegion(new Texture("assets/SartoSprites/Sarto_Dano.png"));
                 break;
             default:
                 System.out.println("Não setou a skin!!!");
@@ -377,6 +404,27 @@ public class Character {
     }
 
     public void setY(float y) {
+        this.y = y;
+    }
+
+    public int getWins() {
+        return this.wins;
+    }
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getWins2() {
+        return this.wins2;
+    }
+    public void setWins2(int wins2) {
+        this.wins2 = wins2;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+    public void setY(int y) {
         this.y = y;
     }
 }
