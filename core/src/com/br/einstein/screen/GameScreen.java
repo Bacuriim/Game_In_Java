@@ -3,12 +3,16 @@ package com.br.einstein.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -28,19 +32,28 @@ public class GameScreen implements Screen {
 
     private boolean shouldFlip = false;
 
+    private String arena;
     private int round = 1;
     private float roundTime = 0;
+    private int timer = 99;
+    private float timeCount = 0;
+    private Label timerLabel;
     private Label roundLabel;
+    private float winTime = 0;
+    private Label winLabel;
     private Stage stage;
     private boolean isGameRunning = true;
     private Sprite spritePause = new Sprite(new Texture("assets/backgrounds/pause.png"));
     private Button menuButton;
     private Button quitButton;
     private Button resumeButton;
-    Texture imgB;
-    Texture redGradient;
-    Texture lightBrownGradient;
-    Texture darkBrownGradient;
+    private Music fightMusic = Gdx.audio.newMusic(Gdx.files.internal("assets/musics/Fight_Music.mp3"));
+    private Texture imgB;
+    private Texture redGradient;
+    private Texture lightBrownGradient;
+    private Texture darkBrownGradient;
+    private Label p1_hp;
+    private Label p2_hp;
     private boolean hit;
 
     private int char1;
@@ -49,11 +62,15 @@ public class GameScreen implements Screen {
     private Character character1;
 
     private Character character2;
+    private Label p1;
+    private Label p2;
 
-    public GameScreen(ScreenManager game, String arena, int char1, int char2) {
+    public GameScreen(ScreenManager game, String arena, int char1, int char2, int round) {
         this.game = game;
         this.char1 = char1;
         this.char2 = char2;
+        this.arena = arena;
+        this.round = round;
         gameCam = new OrthographicCamera();
         viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH, gameCam);
 
@@ -61,11 +78,21 @@ public class GameScreen implements Screen {
         character2 = new Character(1600, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.NUM_1, Input.Keys.NUMPAD_2, Input.Keys.NUMPAD_3, char2);
         character1.setSkin();
         character2.setSkin();
+        p1 = new Label("P1", fontParameters.getLabelStyle50R());
+        p2 = new Label("P2", fontParameters.getLabelStyle50B());
+
+        p1_hp = new Label("P1", fontParameters.getLabelStyle50R());
+        p2_hp = new Label("P2", fontParameters.getLabelStyle50B());
+
         imgB = new Texture(arena);
         redGradient = new Texture("assets/hpBar/redgradient.jpg");
         lightBrownGradient = new Texture ("assets/hpBar/lightbrowngradient.png");
         darkBrownGradient = new Texture("assets/hpBar/darkbrowngradient.png");
         spritePause.setAlpha(0.4f);
+
+        fightMusic.play();
+        fightMusic.setLooping(true);
+        fightMusic.setVolume(0.5f);
 
         menuButton = new TextButton("Menu", fontParameters.getButtonStyle());
         menuButton.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH / 2f, Align.center);
@@ -152,12 +179,41 @@ public class GameScreen implements Screen {
             character1.isHit = true;
         }
 
+        String s = String.valueOf(timer);
+        timerLabel = new Label(s, fontParameters.getLabelStyle50());
+        timerLabel.setPosition(ScreenManager.V_WIDTH / 2f, 1040, Align.center);
+
 
         if (roundTime > 2 && isGameRunning) {
             character1.update();
             character2.update();
             stage.clear();
+            stage.addActor(timerLabel);
+            timeCount += delta;
         }
+
+        if (timeCount >= 1.5f && !(timer == 0)) {
+            timer--;
+            timeCount = 0;
+        }
+
+        if (timer == 0) {
+            if (character1.getHealth() > character2.getHealth()) {
+                character1.setWins(character1.getWins() + 1);
+                nextRound();
+            } else if (character1.getHealth() < character2.getHealth()) {
+                character2.setWins2(character2.getWins2() + 1);
+                nextRound();
+            } else {
+                fightMusic.stop();
+                game.setScreen(new GameScreen(this.game, this.arena, this.char1, this.char2, this.round));
+            }
+        }
+
+        p1.setPosition(character1.getX() + 250, character1.getY() + 500, Align.center);
+        p2.setPosition(character2.getX() + 250, character2.getY() + 500, Align.center);
+        stage.addActor(p1);
+        stage.addActor(p2);
 
         game.batch.begin();
         game.batch.draw(imgB, 0, 0, ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH);
@@ -190,6 +246,8 @@ public class GameScreen implements Screen {
         game.batch.draw(getRedGradient(), ((float) ScreenManager.V_WIDTH*0.1f), (((float) ScreenManager.V_HEIGTH*0.945f)), 700 * character1.getHealth()/100, 50);
         game.batch.end();
 
+        p1_hp.setPosition(((float) ScreenManager.V_WIDTH*0.1f) - 40, (((float) ScreenManager.V_HEIGTH*0.945f) + 30), Align.center);
+
         // Barra de Vida 2
         game.batch.begin();
         game.batch.draw(getLightBrownGradient(), (((float) ScreenManager.V_WIDTH*0.9f)+5), (((float) ScreenManager.V_HEIGTH*0.945f)-5), -710, 60);
@@ -202,6 +260,10 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.draw(getRedGradient(), ((float) ScreenManager.V_WIDTH*0.9f), (((float) ScreenManager.V_HEIGTH*0.945f)), -700 * character2.getHealth()/100, 50);
         game.batch.end();
+
+        p2_hp.setPosition(((float) ScreenManager.V_WIDTH*0.9f) + 40, (((float) ScreenManager.V_HEIGTH*0.945f) + 30), Align.center);
+        stage.addActor(p1_hp);
+        stage.addActor(p2_hp);
 
         stage.draw();
         stage.act();
@@ -225,6 +287,41 @@ public class GameScreen implements Screen {
             stage.addActor(resumeButton);
             stage.addActor(menuButton);
             stage.addActor(quitButton);
+        }
+
+        if (character1.getWins() == 2 || character2.getWins2() == 2) {
+            fightMusic.stop();
+            winTime += Gdx.graphics.getDeltaTime();
+            winLabel = new Label("", fontParameters.getLabelStyle50());
+            winLabel.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH / 2f);
+            winLabel.setAlignment(Align.center);
+
+            if (winTime < 2) {
+                if (character1.getWins() == 2) {
+                    winLabel.setText("Jogador 1 Venceu");
+                    stage.addActor(winLabel);
+                } else if (character2.getWins2() == 2){
+                    winLabel.setText("Jogador 2 Venceu");
+                    stage.addActor(winLabel);
+                }
+                stage.draw();
+            } else {
+                hide();
+                winTime = 0;
+                character1.setWins(0);
+                character2.setWins2(0);
+                Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);
+                returnMenu();
+            }
+        } else {
+            winTime = 0;
+            if (character1.getHealth() == 0) {
+                character2.setWins2(character2.getWins2() + 1);
+                nextRound();
+            } else if (character2.getHealth() == 0) {
+                character1.setWins(character1.getWins() + 1);
+                nextRound();
+            }
         }
     }
 
@@ -259,5 +356,17 @@ public class GameScreen implements Screen {
 
     public void quit() {
         Gdx.app.exit();
+    }
+
+    public void nextRound() {
+        if (character1.getWins() == 1 && character2.getWins2() == 1) {
+            hide();
+            fightMusic.stop();
+            game.setScreen(new GameScreen(this.game, this.arena, this.char1, this.char2, 3));
+        } else if ((character1.getWins() == 1 || character2.getWins2() == 1) && round != 3) {
+            hide();
+            fightMusic.stop();
+            game.setScreen(new GameScreen(this.game, this.arena, this.char1, this.char2, 2));
+        }
     }
 }

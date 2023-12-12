@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.br.einstein.screen.GameScreen;
 import com.br.einstein.screen.ScreenManager;
 
@@ -31,6 +32,8 @@ public class Character {
     private float lastTimeDash;
     private int jump = 1;
     private final int characterId;
+    private static int wins = 0;
+    private static int wins2 = 0;
     private Texture punchImage;
     private Texture kickImage;
     private Texture walkImage;
@@ -271,13 +274,13 @@ public class Character {
 
         if (characterId == 1){
             movementHitBox.set(getX(), getY(), 170, 360);
-            damageHitBox.set(getX(), getY(), 200, 360);
+            damageHitBox.set(getX(), getY(), 220, 360);
         } else if (characterId == 2){
             movementHitBox.set(getX(), getY(), 150, 390);
-            damageHitBox.set(getX(), getY(), 180, 390);
+            damageHitBox.set(getX(), getY(), 200, 390);
         } else if (characterId == 3){
             movementHitBox.set(getX(), getY(), 170, 440);
-            damageHitBox.set(getX(), getY(), 200, 440);
+            damageHitBox.set(getX(), getY(), 220, 440);
         }
 
         if (isPunching) {
@@ -318,6 +321,7 @@ public class Character {
         } else {
             setSkin();
         }
+
 
         stateTime = 0;
         return idle;
@@ -395,6 +399,27 @@ public class Character {
     }
 
     public void setY(float y) {
+        this.y = y;
+    }
+
+    public int getWins() {
+        return this.wins;
+    }
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getWins2() {
+        return this.wins2;
+    }
+    public void setWins2(int wins2) {
+        this.wins2 = wins2;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+    public void setY(int y) {
         this.y = y;
     }
 }
