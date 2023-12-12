@@ -34,6 +34,8 @@ public class SelectionScreen implements Screen {
     private ImageButton castelaoButton;
     private ImageButton estacionamentoButton;
     private ImageButton iracemaChar;
+    private ImageButton loiraChar;
+    private ImageButton sartoChar;
     private Button lutar;
 
     private int char1;
@@ -60,6 +62,14 @@ public class SelectionScreen implements Screen {
         iracemaChar = new ImageButton(texIraB);
         iracemaChar.setPosition(ScreenManager.V_WIDTH / 5f, ScreenManager.V_HEIGTH / 3f, Align.center);
 
+        TextureRegionDrawable texLoiB = new TextureRegionDrawable(new Texture("assets/LoiraSprites/Loira_head.png"));
+        loiraChar = new ImageButton(texLoiB);
+        loiraChar.setPosition(ScreenManager.V_WIDTH / 5f + 60, ScreenManager.V_HEIGTH / 3f, Align.center);
+
+        TextureRegionDrawable texSarB = new TextureRegionDrawable(new Texture("assets/SartoSprites/Sarto_head.png"));
+        sartoChar = new ImageButton(texSarB);
+        sartoChar.setPosition(ScreenManager.V_WIDTH / 5f + 130, ScreenManager.V_HEIGTH / 3f, Align.center);
+
 
         TextureRegionDrawable texCast = new TextureRegionDrawable(new Texture("assets/backgrounds/gameBackgrounds/castelao.png"));
         castelaoButton = new ImageButton(texCast);
@@ -78,6 +88,8 @@ public class SelectionScreen implements Screen {
 
 
         stage.addActor(iracemaChar);
+        stage.addActor(loiraChar);
+        stage.addActor(sartoChar);
         stage.addActor(returnButton);
 
 
@@ -103,6 +115,32 @@ public class SelectionScreen implements Screen {
             }
         });
 
+        loiraChar.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("loira selected");
+                if (selected == 0) {
+                    char1 = 2;
+                } else if (selected == 1) {
+                    char2 = 2;
+                }
+                selected++;
+            }
+        });
+
+        sartoChar.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("sarto selected");
+                if (selected == 0) {
+                    char1 = 3;
+                } else if (selected == 1) {
+                    char2 = 3;
+                }
+                selected++;
+            }
+        });
+
         lutar.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -111,14 +149,6 @@ public class SelectionScreen implements Screen {
             }
         });
 
-    }
-
-    public int getChar1() {
-        return this.char1;
-    }
-
-    public int getChar2() {
-        return this.char2;
     }
 
     @Override
@@ -147,8 +177,36 @@ public class SelectionScreen implements Screen {
                 game.batch.end();
             } if (char2 == 1) {
                 game.batch.begin();
-                game.batch.draw(new TextureRegion(new Texture("assets/IracemaSprites/Iracema_parada_E.png")),
-                        ScreenManager.V_WIDTH - 500, ScreenManager.V_HEIGTH / 10f + 100 , 750, 800);
+                game.batch.draw(new TextureRegion(new Texture("assets/IracemaSprites/Iracema_parada_D.png")),
+                        ScreenManager.V_WIDTH + 250, ScreenManager.V_HEIGTH / 10f + 100 , -750, 800);
+                game.batch.end();
+            }
+        }
+
+        if (selected >= 1) {
+            if (char1 == 2) {
+                game.batch.begin();
+                game.batch.draw(new TextureRegion(new Texture("assets/LoiraSprites/Loira_parada_D.png")),
+                        ScreenManager.V_WIDTH / 20f - 350, ScreenManager.V_HEIGTH / 10f + 100, 750, 800);
+                game.batch.end();
+            } if (char2 == 2) {
+                game.batch.begin();
+                game.batch.draw(new TextureRegion(new Texture("assets/LoiraSprites/Loira_parada_D.png")),
+                        ScreenManager.V_WIDTH + 250, ScreenManager.V_HEIGTH / 10f + 100 , -750, 800);
+                game.batch.end();
+            }
+        }
+
+        if (selected >= 1) {
+            if (char1 == 3) {
+                game.batch.begin();
+                game.batch.draw(new TextureRegion(new Texture("assets/SartoSprites/Sarto_Parado.png")),
+                        ScreenManager.V_WIDTH / 20f - 350, ScreenManager.V_HEIGTH / 10f + 100, 750, 800);
+                game.batch.end();
+            } if (char2 == 3) {
+                game.batch.begin();
+                game.batch.draw(new TextureRegion(new Texture("assets/SartoSprites/Sarto_Parado.png")),
+                        ScreenManager.V_WIDTH + 250, ScreenManager.V_HEIGTH / 10f + 100 , -750, 800);
                 game.batch.end();
             }
         }
@@ -219,7 +277,6 @@ public class SelectionScreen implements Screen {
 
     public void loadGame() {
         hide();
-        game.setScreen(new GameScreen(game, arena));
-        Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
+        game.setScreen(new GameScreen(game, arena, char1, char2));
     }
 }
