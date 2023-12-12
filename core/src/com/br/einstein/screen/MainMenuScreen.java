@@ -2,6 +2,7 @@ package com.br.einstein.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,6 +37,7 @@ public class MainMenuScreen implements Screen {
     private Button exitButton;
     private Label logo;
     private Label madeBy;
+    private Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("assets/musics/menuMusic.mp3"));
 
     public MainMenuScreen(ScreenManager game) {
         this.game = game;
@@ -67,6 +69,10 @@ public class MainMenuScreen implements Screen {
         exitButton.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH / 2f - 20, Align.center);
         menuStage.addActor(button);
         menuStage.addActor(exitButton);
+
+        menuMusic.play();
+        menuMusic.setLooping(true);
+        menuMusic.setVolume(0.5f);
 
 
         button.addListener(new ChangeListener() {
@@ -135,6 +141,7 @@ public class MainMenuScreen implements Screen {
     }
     public void loadSelection() {
         hide();
+        menuMusic.stop();
         game.setScreen(new SelectionScreen(game));
     }
 }
