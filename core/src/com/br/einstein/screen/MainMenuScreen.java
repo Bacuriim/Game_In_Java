@@ -21,10 +21,12 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.br.einstein.mechanics.FontParameters;
+import com.br.einstein.mechanics.ManagerGeral;
 
 public class MainMenuScreen implements Screen {
 
     private FontParameters fontParameters = new FontParameters();
+    private ManagerGeral managerGeral = new ManagerGeral();
 
     private ScreenManager game;
     public Texture texture;
@@ -37,13 +39,17 @@ public class MainMenuScreen implements Screen {
     private Button exitButton;
     private Label logo;
     private Label madeBy;
-    private Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("assets/musics/menuMusic.mp3"));
+    private Music menuMusic;
 
     public MainMenuScreen(ScreenManager game) {
         this.game = game;
         gameCam = new OrthographicCamera();
         viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH, gameCam);
-        texture = new Texture("assets/backgrounds/mainMenuImage.png");
+        managerGeral.loadFundos();
+        managerGeral.loadSons();
+        managerGeral.manager.finishLoading();
+        menuMusic = managerGeral.manager.get("assets/musics/menuMusic.mp3", Music.class);
+        texture = managerGeral.manager.get("assets/backgrounds/mainMenuImage.png", Texture.class);
 
 
         //Setting stage
@@ -111,7 +117,6 @@ public class MainMenuScreen implements Screen {
         menuStage.draw();
 
 
-
     }
 
     @Override
@@ -138,6 +143,9 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
         menuStage.dispose();
         fontParameters.dispose();
+        menuMusic.dispose();
+        game.dispose();
+        texture.dispose();
     }
     public void loadSelection() {
         hide();

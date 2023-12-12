@@ -19,8 +19,6 @@ public class FontParameters {
     private FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("MadHomie-K7RPA.ttf"));
     private BitmapFont font50;
     private BitmapFont font100;
-    private BitmapFont fontP;
-    private Label.LabelStyle font;
     private Label.LabelStyle labelStyle100;
     private Label.LabelStyle labelStyle50;
     private Label.LabelStyle labelStyle50R;
@@ -51,7 +49,6 @@ public class FontParameters {
         font100 = manager.get("MadHomie-K7RPA.ttf", BitmapFont.class);
 
 
-        fontP = new BitmapFont();
 
         //Setting styles
         labelStyle100 = new Label.LabelStyle();
@@ -69,10 +66,6 @@ public class FontParameters {
         labelStyle50B = new Label.LabelStyle();
         labelStyle50B.font = font50;
         labelStyle50B.fontColor = Color.BLUE;
-
-        font = new Label.LabelStyle();
-        font.font = fontP;
-        font.fontColor = Color.WHITE;
 
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = font50;
@@ -94,9 +87,6 @@ public class FontParameters {
     public Label.LabelStyle getLabelStyle50B() {
         return this.labelStyle50B;
     }
-    public Label.LabelStyle getFont() {
-        return this.font;
-    }
 
     public TextButton.TextButtonStyle getButtonStyle() {
         return this.buttonStyle;
@@ -105,5 +95,7 @@ public class FontParameters {
     public void dispose() {
         generator.dispose();
         manager.dispose();
+        font50.dispose();
+        font100.dispose();
     }
 }

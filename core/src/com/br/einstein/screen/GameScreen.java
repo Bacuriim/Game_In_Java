@@ -328,7 +328,14 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        game.batch.dispose();
+        stage.dispose();
+        fightMusic.dispose();
+        fontParameters.dispose();
+        game.dispose();
+        imgB.dispose();
+        redGradient.dispose();
+        lightBrownGradient.dispose();
+        darkBrownGradient.dispose();
     }
 
     public void returnMenu() {

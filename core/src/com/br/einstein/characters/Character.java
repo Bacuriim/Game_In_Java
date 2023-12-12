@@ -300,7 +300,7 @@ public class Character {
         switch (characterId) {
             case 1:
                 idle = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_parada_D.png"));
-                jumping = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_pulo.png"));
+                jumping = new TextureRegion(new Texture("assets/IracemaSprites/Iracema_pulo_D.png"));
                 break;
             case 2:
                 idle = new TextureRegion(new Texture("assets/LoiraSprites/Loira_parada_D.png"));
