@@ -81,7 +81,7 @@ public class GameScreen implements Screen {
         viewport = new FitViewport(ScreenManager.V_WIDTH, ScreenManager.V_HEIGTH, gameCam);
 
         character1 = new Character(-180, 26, Input.Keys.A, Input.Keys.D, Input.Keys.W, Input.Keys.B, Input.Keys.N, Input.Keys.M, char1);
-        character2 = new Character(1600, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.NUM_1, Input.Keys.NUMPAD_2, Input.Keys.NUMPAD_3, char2);
+        character2 = new Character(1600, 26, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.NUMPAD_1, Input.Keys.NUMPAD_2, Input.Keys.NUMPAD_3, char2);
         character1.setSkin();
         character2.setSkin();
         p1 = new Label("P1", fontParameters.getLabelStyle50R());

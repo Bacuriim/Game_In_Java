@@ -19,9 +19,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.br.einstein.mechanics.FontParameters;
-import org.lwjgl.system.CallbackI;
-
-import java.nio.file.Path;
 
 public class SelectionScreen implements Screen {
     private ScreenManager game;
@@ -35,6 +32,7 @@ public class SelectionScreen implements Screen {
     private Button returnButton;
     private ImageButton castelaoButton;
     private ImageButton estacionamentoButton;
+    private ImageButton pitombeiraButton;
     private ImageButton iracemaChar;
     private ImageButton loiraChar;
     private ImageButton sartoChar;
@@ -45,7 +43,7 @@ public class SelectionScreen implements Screen {
     private int char2;
     private int selected = 0;
     private String arena;
-    private String t = "icon.png";
+    private String t = "assets/backgrounds/pause.png";
     Sound Selection = Gdx.audio.newSound(Gdx.files.internal("assets/Sounds/Selection.mp3"));
 
 
@@ -66,26 +64,31 @@ public class SelectionScreen implements Screen {
 
         TextureRegionDrawable texIraB = new TextureRegionDrawable(new Texture("assets/IracemaSprites/Iracema_head.png"));
         iracemaChar = new ImageButton(texIraB);
-        iracemaChar.setPosition(ScreenManager.V_WIDTH / 5f, ScreenManager.V_HEIGTH / 3f, Align.center);
+        iracemaChar.setPosition(ScreenManager.V_WIDTH / 2f - 50, ScreenManager.V_HEIGTH / 3f, Align.center);
 
         TextureRegionDrawable texLoiB = new TextureRegionDrawable(new Texture("assets/LoiraSprites/Loira_head.png"));
         loiraChar = new ImageButton(texLoiB);
-        loiraChar.setPosition(ScreenManager.V_WIDTH / 5f + 60, ScreenManager.V_HEIGTH / 3f, Align.center);
+        loiraChar.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH / 3f, Align.center);
 
         TextureRegionDrawable texSarB = new TextureRegionDrawable(new Texture("assets/SartoSprites/Sarto_head.png"));
         sartoChar = new ImageButton(texSarB);
-        sartoChar.setPosition(ScreenManager.V_WIDTH / 5f + 130, ScreenManager.V_HEIGTH / 3f, Align.center);
+        sartoChar.setPosition(ScreenManager.V_WIDTH / 2f + 50, ScreenManager.V_HEIGTH / 3f, Align.center);
 
 
         TextureRegionDrawable texCast = new TextureRegionDrawable(new Texture("assets/backgrounds/gameBackgrounds/castelao.png"));
         castelaoButton = new ImageButton(texCast);
-        castelaoButton.setPosition(ScreenManager.V_WIDTH / 2f - 100, ScreenManager.V_HEIGTH / 2f);
-        castelaoButton.setSize(100, 100);
+        castelaoButton.setPosition(ScreenManager.V_WIDTH / 2f - 230, ScreenManager.V_HEIGTH / 2f);
+        castelaoButton.setSize(200, 200);
 
         TextureRegionDrawable texEst = new TextureRegionDrawable(new Texture("assets/backgrounds/gameBackgrounds/estacionamento.png"));
         estacionamentoButton = new ImageButton(texEst);
         estacionamentoButton.setPosition(ScreenManager.V_WIDTH / 2f, ScreenManager.V_HEIGTH /2f);
-        estacionamentoButton.setSize(100, 100);
+        estacionamentoButton.setSize(200, 200);
+
+        TextureRegionDrawable texPit = new TextureRegionDrawable(new Texture("assets/backgrounds/gameBackgrounds/pitombeira1.jpg"));
+        pitombeiraButton = new ImageButton(texPit);
+        pitombeiraButton.setPosition(ScreenManager.V_WIDTH / 2f + 230, ScreenManager.V_HEIGTH /2f);
+        pitombeiraButton.setSize(200, 200);
 
 
 
@@ -167,7 +170,7 @@ public class SelectionScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClearColor(100f/255f,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         texture = new Texture(t);
 
@@ -225,13 +228,16 @@ public class SelectionScreen implements Screen {
             stage.addActor(returnButton);
             stage.addActor(castelaoButton);
             stage.addActor(estacionamentoButton);
+            stage.addActor(pitombeiraButton);
 
             if (castelaoButton.isOver()) {
                 t = "assets/backgrounds/gameBackgrounds/castelao.png";
             } else if (estacionamentoButton.isOver()) {
                 t = "assets/backgrounds/gameBackgrounds/estacionamento.png";
+            } else if (pitombeiraButton.isOver()){
+                t = "assets/backgrounds/gameBackgrounds/pitombeira1.jpg";
             } else {
-                t = "icon.png";
+                t = "assets/backgrounds/pause.png";
             }
 
             if (castelaoButton.isPressed()) {
@@ -245,6 +251,12 @@ public class SelectionScreen implements Screen {
                 Selection.play(1.0f);
                 arena = "assets/backgrounds/gameBackgrounds/estacionamento.png";
                 t = "assets/backgrounds/gameBackgrounds/estacionamento.png";
+                selected++;
+            }
+
+            if (pitombeiraButton.isPressed()) {
+                arena = "assets/backgrounds/gameBackgrounds/pitombeira1.jpg";
+                t = "assets/backgrounds/gameBackgrounds/pitombeira1.jpg";
                 selected++;
             }
         }
